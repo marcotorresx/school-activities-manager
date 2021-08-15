@@ -1,0 +1,8 @@
+.users {
+  width: 100%;
+}
+.users_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}

@@ -1,0 +1,19 @@
+.navbar_right {
+  display: flex;
+  align-items: center;
+}
+.navbar_link {
+  text-decoration: none;
+  color: white;
+}
+.navbar_buttons {
+  display: flex;
+  align-items: center;
+}
+.navbar_buttons .MuiSvgIcon-root {
+  width: 33px;
+  height: 33px;
+  margin-left: 10px;
+  cursor: pointer;
+  margin-top: 4px;
+}

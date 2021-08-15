@@ -1,0 +1,11 @@
+.home {
+  width: 100%;
+}
+.home_subject_title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.home_subject_teacher {
+  font-size: 12px;
+}

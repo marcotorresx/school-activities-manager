@@ -1,23 +1,106 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import './App.css'
+import { makeStyles } from '@material-ui/core/styles';
+import { Container } from "@material-ui/core"
+import Navbar from "./components/Navbar"
+import {Switch, Route} from "react-router-dom"
+import Home from "./pages/Home"
+import Login from "./pages/Login"
+import MyAccount from './pages/MyAccount';
+import TeacherRoute from './routes/TeacherRoute';
+import Adds from './pages/Adds';
+import AdminRoute from './routes/AdminRoute';
+import Groups from './pages/Groups';
+import EditSubjectTeacher from './pages/EditSubjectTeacher';
+import Users from './pages/Users';
+import CreateUser from './pages/CreateUser';
+import AdminProvider from './contexts/AdminContext';
+import SeeUser from './pages/SeeUser';
 
+// STYLES
+const useStyles = makeStyles({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "Top",
+    alignItems: "center",
+    padding: "20px 40px"
+  }
+});
+
+// COMPONENT
 function App() {
+
+  const classes = useStyles()
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* NAVBAR */}
+      <Navbar/>
+
+      {/* CONTAINER */}
+      <Container className={classes.container}>
+        <Switch>
+
+          {/* ------- NO AUTH ------- */}
+          <Route path="/" exact component={Home}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/myaccount" component={MyAccount}/>
+          <Route path="/directives" component={Adds}/>
+
+          {/* ------- TEACHERS ROUTE ------- */}
+          <Route path="/teacher">
+            <TeacherRoute>
+
+              {/* MY ACTIVITIES */}
+              <Route path="/teacher/myactivities">
+                MIS ACTIVIDADES
+              </Route>
+
+              {/* EDIT ACTIVITIES */}
+              <Route path="/teacher/editactivities">
+                EDITAR ACTIVIDADES
+              </Route>
+
+            </TeacherRoute> 
+          </Route>
+
+          {/* ------- ADMIN ROUTE ------- */}
+          <Route path="/admin">
+            <AdminRoute>
+              <AdminProvider>
+
+                {/* GROUPS */}
+                <Route path="/admin/groups">
+                  <Groups/>
+                </Route>
+
+                {/* EDIT SUBJECT TEACHER */}
+                <Route path="/admin/editsubjectteacher/:group/:sub/:teach">
+                  <EditSubjectTeacher/>
+                </Route>
+
+                {/* USERS */}
+                <Route path="/admin/users">
+                  <Users/>
+                </Route>
+
+                {/* CREATE USER */}
+                <Route path="/admin/createuser">
+                  <CreateUser/>
+                </Route>
+
+                {/* SEE USER */}
+                <Route path="/admin/user/:username">
+                  <SeeUser/>
+                </Route>
+
+              </AdminProvider>
+            </AdminRoute> 
+          </Route>
+
+        </Switch>
+      </Container>
     </div>
   );
 }

@@ -1,0 +1,26 @@
+.account_fields {
+  width: 470px;
+}
+.create_details_field {
+  display: flex;
+  margin-bottom: 10px;
+}
+.create_details_field > .MuiSvgIcon-root {
+  color: gray;
+  margin-right: 20px;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+}
+.create_details_field b {
+  margin-right: 7px;
+}
+.create_account_input {
+  outline: none;
+  margin-left: 20px;
+  border: 1px solid #ccc;
+  width: 250px;
+  height: 28px;
+  border-radius: 6px;
+  padding: 0px 10px;
+}

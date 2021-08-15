@@ -1,0 +1,16 @@
+.account_fields {
+  width: 470px;
+}
+.details_field {
+  display: flex;
+}
+.details_field > .MuiSvgIcon-root {
+  color: gray;
+  margin-right: 20px;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+}
+.details_field b {
+  margin-right: 7px;
+}
