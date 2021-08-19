@@ -16,6 +16,8 @@ import Users from './pages/Users';
 import CreateUser from './pages/CreateUser';
 import AdminProvider from './contexts/AdminContext';
 import SeeUser from './pages/SeeUser';
+import MyActivities from './pages/MyActivities';
+import EditActivities from './pages/EditActivities';
 
 // STYLES
 const useStyles = makeStyles({
@@ -42,30 +44,30 @@ function App() {
       <Container className={classes.container}>
         <Switch>
 
-          {/* ------- NO AUTH ------- */}
+          {/* -------------- NO AUTH -------------- */}
           <Route path="/" exact component={Home}/>
           <Route path="/login" component={Login}/>
+          <Route path="/adds" component={Adds}/>
           <Route path="/myaccount" component={MyAccount}/>
-          <Route path="/directives" component={Adds}/>
 
-          {/* ------- TEACHERS ROUTE ------- */}
+          {/* -------------- TEACHERS ROUTE -------------- */}
           <Route path="/teacher">
             <TeacherRoute>
 
               {/* MY ACTIVITIES */}
               <Route path="/teacher/myactivities">
-                MIS ACTIVIDADES
+                <MyActivities/>
               </Route>
 
               {/* EDIT ACTIVITIES */}
-              <Route path="/teacher/editactivities">
-                EDITAR ACTIVIDADES
+              <Route path="/teacher/editactivities/:group/:sub/:per/:wk">
+                <EditActivities/>
               </Route>
 
             </TeacherRoute> 
           </Route>
 
-          {/* ------- ADMIN ROUTE ------- */}
+          {/* -------------- ADMIN ROUTE -------------- */}
           <Route path="/admin">
             <AdminRoute>
               <AdminProvider>

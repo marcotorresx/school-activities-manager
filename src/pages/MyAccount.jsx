@@ -1,11 +1,13 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
 import { UserContext } from '../contexts/UserContext'
 import {useHistory} from "react-router"
-import {Card, CardContent, Typography} from '@material-ui/core';
-import PersonIcon from '@material-ui/icons/Person';
-import EmailIcon from '@material-ui/icons/Email';
-import StorageIcon from '@material-ui/icons/Storage';
+import {Card, CardContent, Typography} from '@material-ui/core'
+import PersonIcon from '@material-ui/icons/Person'
+import EmailIcon from '@material-ui/icons/Email'
+import StorageIcon from '@material-ui/icons/Storage'
+import BookIcon from '@material-ui/icons/Book'
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import "./MyAccount.css"
 
 // STYLES
@@ -73,6 +75,26 @@ const MyAccount = () => {
                                 <b>Tipo: </b> {activeUser?.tipo ? activeUser?.tipo : "No disponible"}
                             </Typography>
                         </div>
+                        { activeUser?.turno &&
+                        <div className="details_field">
+                            <AccessTimeIcon />
+                            <Typography variant="subtitle1" component="h2" gutterBottom>
+                                <b>Turno: </b> {activeUser?.turno ? activeUser?.turno : "No disponible"}
+                            </Typography>
+                        </div>}
+                        { (activeUser?.materias && activeUser?.materias.length > 0) &&
+                        <div className="details_field">
+                            <BookIcon />
+                            <Typography variant="subtitle1" component="h2" gutterBottom>
+                                <b>Materias: </b>
+                                <ul className="materias_list">
+                                    {activeUser.materias.map((item, index) => (
+                                        <li className="materias_item" key={index}>{`${item.grupo} - ${item.materia}`}</li>
+                                    ))}
+                                </ul>
+                            </Typography>
+                        </div>
+                        }
                     </div>
                 </CardContent>
             </Card>

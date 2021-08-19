@@ -1,20 +1,21 @@
 import React from 'react'
 import {db} from "../firebase"
-import { GeneralContext } from './GeneralContext'
 import {useHistory} from "react-router"
+import { UserContext } from './UserContext'
 
 export const AdminContext = React.createContext()
 
 const AdminProvider = ({children}) => {
 
-    const {all_users, set_all_users, groups_to_teachers} = React.useContext(GeneralContext)
+    const {all_users, set_all_users, groups_to_teachers} = React.useContext(UserContext)
     const history = useHistory()
 
     // CREATE USER
-    async function createUser(nombre, correo, contra, tipo){
+    async function createUser(nombre, correo, contra, tipo, turno){
         try{
             var new_user = {}
             if (tipo === "Maestro") new_user = {nombre, correo, contra, tipo, materias: []}
+            else if (tipo === "Admin") new_user = {nombre, correo, contra, tipo, turno}
             else new_user = {nombre, correo, contra, tipo}
 
             // Create user in DB
@@ -27,7 +28,7 @@ const AdminProvider = ({children}) => {
         }
         catch(error){
             alert("Ocurrió un error en la creación del usuario.")
-            console.log("CREATE USER ERROR", error)
+            console.log("CREATE USER ERROR:", error)
         }
     }
 
@@ -37,32 +38,44 @@ const AdminProvider = ({children}) => {
             // Change last user
             if (lastTeacher){
                 all_users.forEach(async user => {
+                    // Find teacher
                     if (user.nombre === lastTeacher){
-                        const filtered_subjects = user.materias.filter(last_teacher_subject => !(last_teacher_subject.grupo === group && last_teacher_subject.materia === subject))
+                        // Filter subjects
+                        const filtered_subjects = user.materias.filter(lt_subject => 
+                            !(lt_subject.grupo === group && lt_subject.materia === subject))
+                        // Set subjects in DB
+                            await db.collection("Usuarios").doc(lastTeacher).update({materias: filtered_subjects})
+                        // Set subjects in context
                         user.materias = filtered_subjects
-                        await db.collection("Usuarios").doc(lastTeacher).update({materias: filtered_subjects})
                     }
                 })
             }
             // Change selected user
             if (selectedTeacher){
                 all_users.forEach(async user => {
+                    // Find teacher
                     if (user.nombre === selectedTeacher){
+                        // Create new subjects
                         const new_subject = {grupo: group, materia: subject}
                         const new_teacher_subjects = [...user.materias, new_subject]
-                        user.materias = new_teacher_subjects
+                        // Set subject in DB
                         await db.collection("Usuarios").doc(selectedTeacher).update({materias: new_teacher_subjects})
+                        // Set subjects in context
+                        user.materias = new_teacher_subjects
                     }
                 })
             }
             // Make change on the group - subject matrix
             var selected_group = {}
             groups_to_teachers.forEach(group_to_teacher => {
+                // Find group
                 if (group_to_teacher.grupo === group) {
                     selected_group = group_to_teacher
                 }
             })
+            // Change teacher
             selected_group[subject] = selectedTeacher
+            // Set new group data in DB
             await db.collection("Grupos - Maestros").doc(group).set(selected_group)
 
             // Send to Groups
@@ -74,8 +87,32 @@ const AdminProvider = ({children}) => {
         }
     }
 
+    // DELETE USER
+    async function deleteUser(user){
+        try{
+            // Change subjects teacher in Context and DB
+            user.materias.forEach(grupo_materia => {
+                groups_to_teachers.forEach(async group_teacher => {
+                    if (group_teacher.grupo === grupo_materia.grupo){
+                        group_teacher[grupo_materia.materia] = null
+                        await db.collection("Grupos - Maestros").doc(grupo_materia.grupo).set(group_teacher)
+                    }
+                })
+            })
+            
+            // Delete user from DB
+            await db.collection("Usuarios").doc(user.nombre).delete()
+            set_all_users(all_users.filter(user_item => user_item.nombre !== user.nombre))
+
+            history.push("/admin/users")
+        }
+        catch(error){
+            console.log("DELTE USER ERROR:", error)
+        }
+    }
+
     return (
-        <AdminContext.Provider value={{ createUser, changeTeacherOfSubject }}>
+        <AdminContext.Provider value={{ createUser, changeTeacherOfSubject, deleteUser }}>
             {children}
         </AdminContext.Provider>
     )

@@ -1,0 +1,11 @@
+.filter {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid rgb(212, 212, 212);
+}
+.basic_filter {
+  display: flex;
+  align-items: center;
+}

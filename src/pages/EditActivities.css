@@ -1,0 +1,49 @@
+.editactivities {
+  width: 100%;
+}
+.edit_activities_info {
+  font-family: "Roboto";
+  font-size: 18px;
+  border: 1px solid #ccc;
+  padding: 20px 35px;
+  border-radius: 10px;
+  margin-top: 25px;
+  margin-bottom: 50px;
+}
+.edit_activities_info p {
+  font-weight: 500;
+  margin: 5px 0px;
+}
+.edit_activities_info span {
+  font-weight: 400;
+  margin-left: 10px;
+}
+.activity_div {
+  width: 100%;
+  padding: 0px 5px;
+  margin-top: 30px;
+}
+.activity_div p {
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  margin-left: 10px;
+}
+.activity_div textarea {
+  width: 100%;
+  resize: none;
+  outline: none;
+  border: 1px solid #ccc;
+  padding: 25px;
+  font-family: "Roboto";
+  font-size: 15px;
+  height: 170px;
+}
+.edit_activities_btn_div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 70px;
+  margin-bottom: 80px;
+}

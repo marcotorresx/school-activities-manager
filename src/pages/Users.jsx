@@ -2,9 +2,8 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {Typography, TableContainer, Table, TableBody, TableRow, TableCell, Paper, Button} from '@material-ui/core'
 import {Link} from "react-router-dom"
-import {db} from "../firebase"
 import "./Users.css"
-import { GeneralContext } from '../contexts/GeneralContext'
+import { UserContext } from '../contexts/UserContext'
 
 // STYLES
 const useStyles = makeStyles({
@@ -20,6 +19,9 @@ const useStyles = makeStyles({
     },
     button:{
         width: "200px"
+    },
+    link: {
+        color: "blue"
     }
 });
 
@@ -27,7 +29,7 @@ const useStyles = makeStyles({
 const Users = () => {
 
     // VARIABLES
-    const {all_users} = React.useContext(GeneralContext)
+    const {all_users} = React.useContext(UserContext)
     const classes = useStyles()
     const [teachers, setTeachers] = React.useState([])
     const [directives, setDirectives] = React.useState([])
@@ -43,8 +45,9 @@ const Users = () => {
 
         all_users.forEach(user => {
             if (user.tipo === "Maestro") teachers.push(user)
-            if (user.tipo === "Directivo") directives.push(user)
-            if (user.tipo === "Admin") admins.push(user)
+            else if (user.tipo === "Directivo") directives.push(user)
+            else if (user.tipo === "Admin") admins.push(user)
+            else admins.push(user)
         })
 
         setTeachers(teachers)
@@ -83,27 +86,27 @@ const Users = () => {
                                 <TableCell align="left"><b>VER USUARIO</b></TableCell>
                             </TableRow>
                             {teachers.map(teacher => (
-                                <TableRow key={teacher.nombre}>
-                                    <TableCell align="left">{teacher.nombre}</TableCell>
-                                    <TableCell align="left" style={{width: 350}}>{teacher.correo}</TableCell>
-                                    <TableCell align="left" style={{width: 250}}>{teacher.tipo}</TableCell>
-                                    <TableCell align="left" style={{width: 200}}><Link to={`/admin/user/${teacher.nombre}`}>Ver Usuario</Link></TableCell>
+                                <TableRow key={teacher?.nombre}>
+                                    <TableCell align="left">{teacher?.nombre}</TableCell>
+                                    <TableCell align="left" style={{width: 350}}>{teacher?.correo}</TableCell>
+                                    <TableCell align="left" style={{width: 250}}>{teacher?.tipo}</TableCell>
+                                    <TableCell align="left" style={{width: 200}}><Link className={classes.link} to={`/admin/user/${teacher?.nombre}`}>Ver Usuario</Link></TableCell>
                                 </TableRow>
                             ))}
                             {directives.map(directive => (
-                                <TableRow key={directive.nombre}>
-                                    <TableCell align="left">{directive.nombre}</TableCell>
-                                    <TableCell align="left" style={{width: 350}}>{directive.correo}</TableCell>
-                                    <TableCell align="left" style={{width: 250}}>{directive.tipo}</TableCell>
-                                    <TableCell align="left" style={{width: 200}}><Link to={`/admin/user/${directive.nombre}`}>Ver Usuario</Link></TableCell>
+                                <TableRow key={directive?.nombre}>
+                                    <TableCell align="left">{directive?.nombre}</TableCell>
+                                    <TableCell align="left" style={{width: 350}}>{directive?.correo}</TableCell>
+                                    <TableCell align="left" style={{width: 250}}>{directive?.tipo}</TableCell>
+                                    <TableCell align="left" style={{width: 200}}><Link className={classes.link} to={`/admin/user/${directive?.nombre}`}>Ver Usuario</Link></TableCell>
                                 </TableRow>
                             ))}
                             {admins.map(admin => (
-                                <TableRow key={admin.nombre}>
-                                    <TableCell align="left">{admin.nombre}</TableCell>
-                                    <TableCell align="left" style={{width: 350}}>{admin.correo}</TableCell>
-                                    <TableCell align="left" style={{width: 250}}>{admin.tipo}</TableCell>
-                                    <TableCell align="left" style={{width: 200}}><Link to={`/admin/user/${admin.nombre}`}>Ver Usuario</Link></TableCell>
+                                <TableRow key={admin?.nombre}>
+                                    <TableCell align="left">{admin?.nombre}</TableCell>
+                                    <TableCell align="left" style={{width: 350}}>{admin?.correo}</TableCell>
+                                    <TableCell align="left" style={{width: 250}}>{admin?.tipo}</TableCell>
+                                    <TableCell align="left" style={{width: 200}}><Link className={classes.link} to={`/admin/user/${admin?.nombre}`}>Ver Usuario</Link></TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

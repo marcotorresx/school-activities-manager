@@ -1,9 +1,10 @@
 import React from 'react'
 import "./Groups.css"
 import { makeStyles } from '@material-ui/core/styles'
-import {Button, FormControl, Select, InputLabel, Typography, TableContainer, Table, TableBody, TableRow, TableCell, Paper} from '@material-ui/core'
+import {FormControl, Select, InputLabel, Typography, TableContainer, Table, TableBody, TableRow, TableCell, Paper} from '@material-ui/core'
 import {GeneralContext} from '../contexts/GeneralContext'
 import {Link} from "react-router-dom"
+import { UserContext } from '../contexts/UserContext'
 
 // STYLES
 const useStyles = makeStyles({
@@ -21,6 +22,9 @@ const useStyles = makeStyles({
         margin: "30px 0px",
         width: "100%"
     },
+    link: {
+        color: "blue"
+    }
 });
 
 // COMPONENT
@@ -28,9 +32,9 @@ const Groups = () => {
 
     // VARIABLES
     const classes = useStyles()
-    const {all_groups, groups_to_subjects, groups_to_teachers} = React.useContext(GeneralContext)
-    const [data, setData] = React.useState({})
-    const [dataLoaded, setDataLoaded] = React.useState(false)
+    const {all_groups, groups_to_subjects} = React.useContext(GeneralContext)
+    const {groups_to_teachers} = React.useContext(UserContext)
+    const [data, setData] = React.useState([])
     const [selectedGroup, setSelectedGroup] = React.useState("")
 
     // MAKE TABLE DATA
@@ -48,7 +52,6 @@ const Groups = () => {
                 data.push({materia: subject, maestro: group_teachers[subject]})
             })
             setData(data)
-            setDataLoaded(true)
         }
     }
 
@@ -75,7 +78,7 @@ const Groups = () => {
                         onChange={e => setSelectedGroup(e.target.value)}
                     >
                         <option aria-label="None" value=""/>
-                        {all_groups.map(group => (<option value={group} key={group}>{group}</option>))} {/* Load all groups */}
+                        {all_groups.map(group => (<option value={group} key={group}>{group}</option>))}
                     </Select>
                 </FormControl>
 
@@ -96,19 +99,23 @@ const Groups = () => {
                         </TableRow>
 
                         {/* SUBJECTS */
-                        (dataLoaded && selectedGroup !== "") && data.map(item => (
+                        selectedGroup !== "" && data.map(item => (
                             
-                            <TableRow key={item.materia}>
-                                <TableCell align="left" style={{ width: 300 }}>
-                                    {item.materia ? item.materia : "No hay materia"}
-                                </TableCell>
-                                <TableCell align="left">
-                                    {item.maestro ? item.maestro : "No hay maestro"}
-                                </TableCell>
-                                <TableCell align="left" style={{ width: 200 }}>
-                                    <Link to={`/admin/editsubjectteacher/${selectedGroup}/${item.materia}/${item.maestro ? item.maestro : "null"}`}>Editar Maestro</Link>
-                                </TableCell>
-                            </TableRow>
+                        <TableRow key={item?.materia}>
+                            <TableCell align="left" style={{ width: 300 }}>
+                                {item?.materia ? item?.materia : "No hay materia"}
+                            </TableCell>
+                            <TableCell align="left">
+                                {item?.maestro ? item?.maestro : "No hay maestro"}
+                            </TableCell>
+                            <TableCell align="left" style={{ width: 200 }}>
+                                <Link 
+                                className={classes.link} 
+                                to={`/admin/editsubjectteacher/${selectedGroup}/${item?.materia}/${item?.maestro ? item?.maestro : "null"}`}>
+                                    Editar Maestro
+                                </Link>
+                            </TableCell>
+                        </TableRow>
                         ))
                         }
                     </TableBody>

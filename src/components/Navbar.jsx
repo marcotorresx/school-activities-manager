@@ -63,7 +63,8 @@ const Navbar = () => {
                     <>
                         <Link to="/admin/groups" className="navbar_link">
                             <Button color="inherit" className={classes.button}>GRUPOS</Button>
-                        </Link><Link to="/admin/users" className="navbar_link">
+                        </Link>
+                        <Link to="/admin/users" className="navbar_link">
                             <Button color="inherit" className={classes.button}>USUARIOS</Button>
                         </Link>
                     </>
@@ -73,13 +74,6 @@ const Navbar = () => {
                     (activeUser && activeUser.tipo === "Maestro") &&
                     <Link to="/teacher/myactivities" className="navbar_link">
                         <Button color="inherit" className={classes.button}>MIS ACTIVIDADES</Button>
-                    </Link>
-                    }
-
-                    {/* DIRECTIVES */
-                    (activeUser && activeUser.tipo === "Directivo") &&
-                    <Link to="/directives" className="navbar_link">
-                        <Button color="inherit" className={classes.button}>DIRECTIVOS</Button>
                     </Link>
                     }
 

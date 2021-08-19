@@ -1,8 +1,9 @@
 import React from 'react'
-import "./Filter.css"
+import "./FilterTeacher.css"
 import { makeStyles } from '@material-ui/core/styles'
 import {Button, Typography, FormControl, Select, InputLabel} from '@material-ui/core'
 import {GeneralContext} from '../contexts/GeneralContext';
+import { UserContext } from '../contexts/UserContext';
 
 // STYLES
 const useStyles = makeStyles({
@@ -13,27 +14,32 @@ const useStyles = makeStyles({
 });
 
 // COMPONENT
-const Filter = ({setActivities, setLoaded}) => {
+const FilterTeacher = ({setActivities, setLoaded}) => {
 
     // VARIABLES
     const classes = useStyles()
-    const {all_groups, weeks, groups_to_subjects, findActivities} = React.useContext(GeneralContext)
-    const [selectedGroup, setSelectedGroup] = React.useState("")
-    const [selectedSubject, setSelectedSubject] = React.useState("")
+    const {weeks, findActivities} = React.useContext(GeneralContext)
+    const {activeUser} = React.useContext(UserContext)
+    const [selectedGroupAndSubject, setSelectedGroupAndSubject] = React.useState("")
     const [selectedPeriod, setSelectedPeriod] = React.useState("")
     const [selectedWeek, setSelectedWeek] = React.useState("")
 
     // HANDLE CLICK
     async function handleClick(){
-        if (selectedGroup === "" || !selectedGroup.trim() || selectedSubject === "" || !selectedSubject.trim() || selectedPeriod === "" || !selectedPeriod.trim() || selectedWeek === "" || !selectedWeek.trim()){
+        // Validations
+        if (selectedGroupAndSubject === "" || !selectedGroupAndSubject.trim() || selectedPeriod === "" || !selectedPeriod.trim() || selectedWeek === "" || !selectedWeek.trim()){
             alert("Para hacer una búsqueda debes de rellenar todos los campos de la filtración.")
             return
         }
 
+        // Divide group and subject
+        const divide_group_subject = selectedGroupAndSubject.split(",")
+        const group = divide_group_subject[0]
+        const subject = divide_group_subject[1]
+
         // Find activities
-        console.log("FILTER STUDENT ACTIVITIES PARAMS:", selectedGroup, selectedSubject, selectedPeriod, selectedWeek)
-        const activities = await findActivities("student", selectedGroup, selectedSubject, selectedPeriod, selectedWeek)
-        console.log("FILTER STUDENT ACTIVITIES RECIVED:", activities)
+        const activities = await findActivities("teacher", group, subject, selectedPeriod, selectedWeek)
+        console.log("FILTER TEACHER ACTIVITIES RECIVED:", activities)
         setActivities(activities)
         setLoaded(true)
     }
@@ -41,34 +47,23 @@ const Filter = ({setActivities, setLoaded}) => {
     return (
         <div className="filter">
 
-            <Typography variant="h6" component="h2" style={{marginBottom: "20px"}}>Buscar Actividades</Typography>
+            <Typography variant="h6" component="h2" style={{marginBottom: "20px"}}>Buscar Actividades de Grupo</Typography>
 
             {/* BASIC FILTER */}
             <div className="basic_filter">
 
                 {/* SELECT GROUP */}
-                <FormControl variant="outlined" className={classes.formControl}>
+                <FormControl variant="outlined" className={classes.formControl} style={{width: "230px"}}>
                     <InputLabel htmlFor="select-grupo">Grupo</InputLabel>
                     <Select native label="Grupo" 
                         inputProps={{ name: 'Grupo', id: 'select-grupo',}}
-                        value={selectedGroup}
-                        onChange={e => setSelectedGroup(e.target.value)}
+                        value={selectedGroupAndSubject}
+                        onChange={e => setSelectedGroupAndSubject(e.target.value)}
                     >
                         <option aria-label="None" value=""/>
-                        {all_groups.map(group => (<option value={group} key={group}>{group}</option>))}
-                    </Select>
-                </FormControl>
-
-                {/* SELECT SUBJECT */}
-                <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel htmlFor="select-materia">Materia</InputLabel>
-                    <Select native label="Materia" 
-                        inputProps={{ name: 'Materia', id: 'select-materia',}}
-                        value={selectedSubject}
-                        onChange={e => setSelectedSubject(e.target.value)}
-                    >
-                        <option aria-label="None" value=""/>
-                        {selectedGroup !== "" && groups_to_subjects[selectedGroup].map(week => (<option value={week} key={week}>{week}</option>))}
+                        {activeUser?.materias?.map((group, index) => 
+                            (<option value={`${group.grupo},${group.materia}`} key={index}>{`${group.grupo} - ${group.materia}`}</option>)
+                        )}
                     </Select>
                 </FormControl>
 
@@ -108,4 +103,4 @@ const Filter = ({setActivities, setLoaded}) => {
     )
 }
 
-export default Filter
+export default FilterTeacher

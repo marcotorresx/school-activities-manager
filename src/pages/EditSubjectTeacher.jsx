@@ -6,8 +6,9 @@ import {Card, CardContent, Typography, Button} from '@material-ui/core';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import BookIcon from '@material-ui/icons/Book';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import { GeneralContext } from '../contexts/GeneralContext';
 import { AdminContext } from '../contexts/AdminContext';
+import { UserContext } from '../contexts/UserContext';
+import {useHistory} from "react-router"
 
 // STYLES
 const useStyles = makeStyles({
@@ -30,35 +31,57 @@ const useStyles = makeStyles({
     }
 });
 
+// CONSTANTS
+const groups_matutino = ["1A", "1B", "1C", "1D", "1E", "2A", "2B", "2C", "2D", "2E", "3A", "3B", "3C", "3D", "3E"]
+const groups_vespertino = ["1F", "1G", "1H", "2F", "2G", "2H", "3F", "3G", "3H"]
+
 // COMPONENT
 const EditSubjectTeacher = () => {
 
     // VARIABLES
     const classes = useStyles()
-    const {all_users} = React.useContext(GeneralContext)
+    const {activeUser, all_users} = React.useContext(UserContext)
     const {changeTeacherOfSubject} = React.useContext(AdminContext)
     const {group, sub, teach} = useParams()
-    const [subject, setSubject] = React.useState(sub)
-    const [teacher, setTeacher] = React.useState(teach)
+    const [subject, setSubject] = React.useState("")
+    const [teacher, setTeacher] = React.useState("")
     const [selectedTeacher, setSelectedTeacher] = React.useState("null")
     const [cleaned, setCleaned] = React.useState(false)
+    const [btnDisabled, setBtnDisabled] = React.useState(false)
+    const history = useHistory()
+
+    // CHECK ADMIN TURN
+    function checkAdminTurn(){
+        // Check group type
+        var group_type = null
+        if (groups_matutino.includes(group)) group_type = "Matutino"
+        if (groups_vespertino.includes(group)) group_type = "Vespertino"
+
+        // Check if turns are equal
+        if (activeUser?.turno !== group_type){
+            alert("Usted no es administrador de este turno, no puede hacer cambios en este turno.")
+            history.push("/admin/groups")
+        }
+    }
 
     // CLEAN PARAMS
     function cleanParams(){
-        setSubject(subject.replace("%20", " "))
-        setTeacher((teacher && teacher !== "null") ? teacher.replace("%20", " ") : null)
-        setSelectedTeacher(teacher.replace("%20", " "))
+        setSubject(sub.replace("%20", " "))
+        setTeacher((!teach || teach === "null") ? null : teach.replace("%20", " "))
+        setSelectedTeacher(teach.replace("%20", " "))
         setCleaned(true)
     }
 
     // HANDLE CLICK
     function handleClick(){
+        setBtnDisabled(true)
         if (selectedTeacher === "null") changeTeacherOfSubject(group, subject, teacher, null)
         else changeTeacherOfSubject(group, subject, teacher, selectedTeacher)
     }
 
     // USE EFFECT
     React.useEffect(() => {
+        checkAdminTurn()
         cleanParams()
     }, [])
 
@@ -93,14 +116,14 @@ const EditSubjectTeacher = () => {
                                 value={selectedTeacher} onChange={e => setSelectedTeacher(e.target.value)}
                             >
                                 <option value="null"></option>
-                                {all_users.map(user => user.tipo === "Maestro" && (
-                                    <option value={user.nombre} key={user.nombre}>{user.nombre}</option>
+                                {all_users.map(user => user?.tipo === "Maestro" && (
+                                    <option value={user?.nombre} key={user?.nombre}>{user?.nombre}</option>
                                 ))}
                             </select>
                         </div>
                     </div>
 
-                    <Button variant="contained" color="primary" className={classes.button} onClick={handleClick}>Guardar Cambios</Button>
+                    <Button variant="contained" color="primary" className={classes.button} disabled={btnDisabled} onClick={handleClick}>Guardar Cambios</Button>
 
                 </CardContent>
             </Card>

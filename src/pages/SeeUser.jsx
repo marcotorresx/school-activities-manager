@@ -1,25 +1,124 @@
 import React from 'react'
-import { GeneralContext } from '../contexts/GeneralContext'
 import {useParams} from "react-router-dom"
+import {db} from "../firebase"
+import {Card, CardContent, Typography, Button} from '@material-ui/core'
+import PersonIcon from '@material-ui/icons/Person'
+import EmailIcon from '@material-ui/icons/Email'
+import StorageIcon from '@material-ui/icons/Storage'
+import BookIcon from '@material-ui/icons/Book'
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import { makeStyles } from '@material-ui/core/styles'
+import "./SeeUser.css"
+import { AdminContext } from '../contexts/AdminContext'
 
+// STYLES
+const useStyles = makeStyles({
+    card: {
+        margin: "40px 0px",
+        width: "550px",
+        padding: "10px",
+        position: "relative"
+    },
+    title: {
+        margin: "0px 0px 25px 0px",
+    },
+    button: {
+        margin: "30px 0px 0px 0px",
+    },
+    cardcontent: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+    }
+});
+
+// COMPONENT
 const SeeUser = () => {
 
+    const classes = useStyles()
+    const {deleteUser} = React.useContext(AdminContext)
     const {username} = useParams()
-    const {all_users} = React.useContext(GeneralContext)
-    const [user, setUser] = React.useState("")
+    const [user, setUser] = React.useState({})
+    const [userLoaded, setUserLoaded] = React.useState(false)
+
+    // GET USER
+    async function getUser(){
+        const cleaned_username = username.replace("%20", " ")
+        const res = await db.collection("Usuarios").doc(cleaned_username).get()
+        if (res.exists){
+            setUser(res.data())
+            setUserLoaded(true)
+        }
+        else alert("Hubo un error en la carga del usuario en la base de datos.")
+    }
+
+    // CLICK HANDLER
+    function clickHandler(){
+        const confirm = window.confirm("¿Estás seguro de querer eliminar este usuario?")
+        if (confirm) deleteUser(user)
+    }
 
     // USE EFFECT
     React.useEffect(() => {
-        console.log("ALL", all_users)
-        const cleaned_username = username.replace("%20", " ")
-        all_users.forEach(user_item => {
-            if (user_item.nombre === cleaned_username) console.log(user_item)
-        })
+        getUser()
     }, [])
 
     return (
+        userLoaded &&
         <div>
-            SEE USER
+            <Card className={classes.card}>
+                <CardContent className={classes.cardcontent}>
+                    {/* TITULO */}
+                    <Typography variant="h6" component="h2" className={classes.title} align="center">CUENTA DE USUARIO</Typography>
+
+                    {/* FIELDS */}
+                    <div className="account_fields">
+                        <div className="details_field">
+                            <PersonIcon />
+                            <Typography variant="subtitle1" component="h2" gutterBottom>
+                                <b>Nombre: </b> {user?.nombre ? user?.nombre : "No disponible"}
+                            </Typography>
+                        </div>
+                        <div className="details_field">
+                            <EmailIcon />
+                            <Typography variant="subtitle1" component="h2" gutterBottom>
+                                <b>Correo: </b> {user?.correo ? user?.correo : "No disponible"}
+                            </Typography>
+                        </div>
+                        <div className="details_field">
+                            <StorageIcon />
+                            <Typography variant="subtitle1" component="h2" gutterBottom>
+                                <b>Tipo: </b> {user?.tipo ? user?.tipo : "No disponible"}
+                            </Typography>
+                        </div>
+                        { user?.turno &&
+                        <div className="details_field">
+                            <AccessTimeIcon />
+                            <Typography variant="subtitle1" component="h2" gutterBottom>
+                                <b>Turno: </b> {user?.turno ? user?.turno : "No disponible"}
+                            </Typography>
+                        </div>}
+                        
+                        { (user?.materias && user?.materias.length > 0) &&
+                        <div className="details_field">
+                            <BookIcon />
+                            <Typography variant="subtitle1" component="h2" gutterBottom>
+                                <b>Materias: </b>
+                                <ul className="materias_list">
+                                    {user?.materias.map((item, index) => (
+                                        <li className="materias_item" key={index}>{`${item?.grupo} - ${item?.materia}`}</li>
+                                    ))}
+                                </ul>
+                            </Typography>
+                        </div>
+                        }
+                    </div>
+                    
+                    {/* DELETE BUTTON */}
+                    <Button variant="outlined" color="secondary" size="small" className={classes.button} onClick={clickHandler}>Borrar Usuario</Button>
+
+                </CardContent>
+            </Card>
         </div>
     )
 }

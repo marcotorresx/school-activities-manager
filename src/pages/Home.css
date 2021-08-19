@@ -9,3 +9,38 @@
 .home_subject_teacher {
   font-size: 12px;
 }
+.search_header {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 30px 0px 10px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  font-family: "Roboto", sans-serif;
+  line-height: 25px;
+  padding-left: 20px;
+}
+.search_header p {
+  width: auto;
+  font-weight: 500;
+}
+.search_header span {
+  font-weight: 400;
+  margin-left: 5px;
+}
+.activity {
+  border: 1px solid #ccc;
+  padding: 30px;
+  margin-bottom: 40px;
+  border-radius: 10px;
+  font-family: "Roboto", sans-serif;
+  white-space: pre-wrap;
+}
+.activity_title {
+  font-size: 17px;
+  margin: 0px 0px 20px 0px;
+  font-weight: 500;
+}
+.activity_content {
+  line-height: 25px;
+}

@@ -2,62 +2,54 @@ import React from 'react'
 import "./Home.css"
 import Filter from '../components/Filter'
 import { makeStyles } from '@material-ui/core/styles';
-import {TableContainer, Table, TableBody, TableRow, TableCell, Paper} from '@material-ui/core'
+import {Typography} from '@material-ui/core'
 
-// STYLES
-const useStyles = makeStyles({
-    tableContainer: {
-        margin: "30px 0px"
-    },
-    table: {
-        width: "100%"
-    }
-})
-
-// COMPONENT
 const Home = () => {
 
-    const classes = useStyles()
+    // VARIABLES 
+    const [activities, setActivities] = React.useState({})
+    const [loaded, setLoaded] = React.useState(false)
 
     return (
         <div className="home">
             {/* FILTER */}
-            <Filter/>
+            <Filter setActivities={setActivities} setLoaded={setLoaded}/>
 
-            {/* ACTIVITIES */}
-            <TableContainer component={Paper} className={classes.tableContainer}>
-                <Table className={classes.table}>
+            {/* SERACH RESULT */
+            loaded &&
+            <>
+                {/* BREADCUM */}
+                <div className="search_header">
+                    <p>Grupo: <span>{activities?.grupo ? activities?.grupo : "No disponible"}</span></p>
+                    <p>Materia: <span>{activities?.materia ? activities?.materia : "No disponible"}</span></p>
+                    <p>Periodo: <span>{activities?.periodo ? activities?.periodo : "No disponible"}</span></p>
+                    <p>Semana: <span>{activities?.semana ? activities?.semana : "No disponible"}</span></p>
+                    <p>Maestro: <span>{activities?.maestro ? activities?.maestro : "No disponible"}</span></p>
+                </div>
 
-                    {/* BODY */}
-                    <TableBody>
+                {/* ACTIVITIES */}
+                <div className="activities_container">
 
-                        {/* HEADERS */}
-                        <TableRow key="headers">
-                            <TableCell align="left"><b>MATERIA</b></TableCell>
-                            <TableCell align="left"><b>ACTIVIDAD 1</b></TableCell>
-                            <TableCell align="left"><b>ACTIVIDAD 2</b></TableCell>
-                            <TableCell align="left"><b>ACTIVIDAD 3</b></TableCell>
-                        </TableRow>
+                    {/* ACTIVITY 1 */}
+                    <div className="activity">
+                        <h2 className="activity_title">Actividad 1</h2>
+                        <p className="activity_content">{activities?.act1 ? activities?.act1.replaceAll("*_/", "\n") : "No hay actividad registrada"}</p>
+                    </div>
 
-                        {/* SUBJECTS */}
-                        <TableRow>
-                            <TableCell align="center">
-                                <p className="home_subject_title">ESPAÑOL</p>
-                                <p className="home_subject_teacher">Marco Antonio Torres Sepúlveda</p>
-                            </TableCell>
-                            <TableCell align="left" style={{ width: 337 }}>
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati at adipisci beatae cumque quam repellat blanditiis, asperiores quaerat ex ducimus veritatis odit, quod delectus expedita, libero molestias! Tempore, reiciendis in?
-                            </TableCell>
-                            <TableCell align="left" style={{ width: 337 }}>
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati at adipisci beatae cumque quam repellat blanditiis, asperiores quaerat ex ducimus veritatis odit, quod delectus expedita, libero molestias! Tempore, reiciendis in?
-                            </TableCell>
-                            <TableCell align="left" style={{ width: 337 }}>
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati at adipisci beatae cumque quam repellat blanditiis, asperiores quaerat ex ducimus veritatis odit, quod delectus expedita, libero molestias! Tempore, reiciendis in?
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                    {/* ACTIVITY 2 */}
+                    <div className="activity">
+                        <h2 className="activity_title">Actividad 2</h2>
+                        <p className="activity_content">{activities?.act2 ? activities?.act2 : "No hay actividad registrada"}</p>
+                    </div>
+
+                    {/* ACTIVITY 3 */}
+                    <div className="activity">
+                        <h2 className="activity_title">Actividad 3</h2>
+                        <p className="activity_content">{activities?.act3 ? activities?.act3 : "No hay actividad registrada"}</p>
+                    </div>
+                </div>
+            </>
+            }
         </div>
     )
 }

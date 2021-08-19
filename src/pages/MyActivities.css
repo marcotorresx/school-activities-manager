@@ -1,0 +1,24 @@
+.my_activities {
+  width: 100%;
+}
+.myactivities_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 40px 30px 40px 20px;
+}
+.search_info {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto", sans-serif;
+  line-height: 25px;
+}
+.search_info p {
+  width: auto;
+  font-weight: 500;
+}
+.search_info span {
+  font-weight: 400;
+  margin-left: 5px;
+}

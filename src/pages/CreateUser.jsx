@@ -5,6 +5,7 @@ import PersonIcon from '@material-ui/icons/Person'
 import EmailIcon from '@material-ui/icons/Email'
 import StorageIcon from '@material-ui/icons/Storage'
 import LockIcon from '@material-ui/icons/Lock'
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import "./CreateUser.css"
 import { AdminContext } from '../contexts/AdminContext'
 
@@ -39,6 +40,7 @@ const CreateUser = () => {
     const [correo, setCorreo] = React.useState("")
     const [contra, setContra] = React.useState("")
     const [tipo, setTipo] = React.useState("")
+    const [turno, setTurno] = React.useState("")
 
     // CLICK HANDLER
     function clickHandler(){
@@ -47,9 +49,18 @@ const CreateUser = () => {
             alert("Para crear un usuario todos los campos deben de estar llenos.")
             return
         }
+        if ( !(correo.includes("@") && correo.includes(".")) ){
+            alert("El correo ingresado no es válido.")
+            return
+        }
+        if ( tipo === "Admin" && ( turno === "" || !turno.trim() ) ){
+            alert("Para crear una cuenta de administrador debes seleccionar un turno.")
+            return
+        }
 
         // Create User
-        createUser(nombre, correo, contra, tipo)
+        if (tipo === "Admin") createUser(nombre, correo, contra, tipo, turno)
+        else createUser(nombre, correo, contra, tipo, null)
 
         // Clean Fields
         setNombre("")
@@ -100,6 +111,18 @@ const CreateUser = () => {
                                 <option value="Admin">Admin</option>
                             </select>
                         </div>
+                        {tipo === "Admin" &&
+                        <div className="create_details_field">
+                            <AccessTimeIcon />
+                            <Typography variant="subtitle1" component="h2" gutterBottom>
+                                <b>Turno: </b>
+                            </Typography>
+                            <select type="text" className="create_account_input" value={turno} onChange={e => setTurno(e.target.value)}>
+                                <option value=""></option>
+                                <option value="Matutino">Matutino</option>
+                                <option value="Vespertino">Vespertino</option>
+                            </select>
+                        </div>}
                     </div>
 
                     <Button className={classes.button} variant="contained" color="primary" onClick={clickHandler}>CREAR USUARIO</Button>

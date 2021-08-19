@@ -1,0 +1,53 @@
+.adds {
+  width: 100%;
+}
+.adds_container {
+  margin-top: 10px;
+}
+.add_container {
+  position: relative;
+  padding: 25px;
+  box-shadow: 0px 0px 10px rgb(233, 233, 233);
+  margin-bottom: 20px;
+  border-radius: 10px;
+  font-family: "Roboto", sans-serif;
+  line-height: 21px;
+}
+.add_date {
+  font-size: 13px;
+  color: gray;
+  margin-bottom: 5px;
+}
+.add_container .MuiSvgIcon-root {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+  transition: 300ms all;
+  color: gray;
+  cursor: pointer;
+}
+.add_container .MuiSvgIcon-root:hover {
+  color: crimson;
+}
+.create_add_container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 25px;
+}
+.new_add_textarea {
+  resize: none;
+  outline: none;
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 7px;
+  width: 600px;
+  height: 70px;
+  padding: 15px;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+}
