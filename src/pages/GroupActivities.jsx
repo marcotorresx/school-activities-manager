@@ -38,16 +38,14 @@ const GroupActivities = () => {
 
     // HANDLE CLICK
     async function handleClick(){
-        setLoaded(false)
-        setDisableBtn(true)
         if (selectedGroup === "" || !selectedGroup.trim() || selectedPeriod === "" || !selectedPeriod.trim() || selectedWeek === "" || !selectedWeek.trim()){
             alert("Para hacer una búsqueda debes de rellenar todos los campos de la filtración.")
-            setLoaded(true)
-            setDisableBtn(false)
             return
         }
-
+        
         // Find activities
+        setLoaded(false)
+        setDisableBtn(true)
         const activities = await findGroupActivities(selectedGroup, selectedPeriod, selectedWeek)
         console.log("GROUP ACTIVITIES RECIVED:", activities)
         setActivities(activities)

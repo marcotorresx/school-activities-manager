@@ -22,19 +22,6 @@ import EditActivities from './pages/EditActivities';
 import GroupActivities from './pages/GroupActivities';
 import Emails from './pages/Emails';
 
-// STYLES
-const useStyles = makeStyles({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "Top",
-    alignItems: "center",
-    padding: "20px 40px",
-    minHeight: "100vh"
-  }
-});
-
-// COMPONENT
 function App() {
   return (
     <div className="App">
@@ -99,7 +86,7 @@ function App() {
                   <SeeUser/>
                 </Route>
 
-                {/* GRUUP ACTIVITIES */}
+                {/* GROUP ACTIVITIES */}
                 <Route path="/admin/groupactivities">
                   <GroupActivities/>
                 </Route>

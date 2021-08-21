@@ -26,16 +26,16 @@ const FilterTeacher = ({setActivities, setLoaded}) => {
 
     // HANDLE CLICK
     async function handleClick(){
-        // Validations
-        if (selectedGroupAndSubject === "" || !selectedGroupAndSubject.trim() || selectedPeriod === "" || !selectedPeriod.trim() || selectedWeek === "" || !selectedWeek.trim()){
-            alert("Para hacer una búsqueda debes de rellenar todos los campos de la filtración.")
-            return
-        }
-
         // Divide group and subject
         const divide_group_subject = selectedGroupAndSubject.split(",")
         const group = divide_group_subject[0]
         const subject = divide_group_subject[1]
+
+        // Validations
+        if (group === "" || !group.trim() || subject === "" || !subject.trim() || selectedPeriod === "" || !selectedPeriod.trim() || selectedWeek === "" || !selectedWeek.trim()){
+            alert("Para hacer una búsqueda debes de rellenar todos los campos de la filtración.")
+            return
+        }
 
         // Find activities
         const activities = await findActivities("teacher", group, subject, selectedPeriod, selectedWeek)
@@ -62,7 +62,7 @@ const FilterTeacher = ({setActivities, setLoaded}) => {
                     >
                         <option aria-label="None" value=""/>
                         {activeUser?.materias?.map((group, index) => 
-                            (<option value={`${group.grupo},${group.materia}`} key={index}>{`${group.grupo} - ${group.materia}`}</option>)
+                            (<option value={`${group?.grupo},${group?.materia}`} key={index}>{`${group?.grupo} - ${group?.materia}`}</option>)
                         )}
                     </Select>
                 </FormControl>

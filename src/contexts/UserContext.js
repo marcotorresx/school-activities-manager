@@ -39,10 +39,8 @@ const UserProvider = ({children}) => {
             const {contra, ...others} = userDB
             setActiveUser(others)
             localStorage.setItem("user_est_57", JSON.stringify(others))
-
-
             history.push("/")
-
+            
         }
         catch(error){
             console.log("LOGIN ERROR:", error)
@@ -59,9 +57,9 @@ const UserProvider = ({children}) => {
     // GET DATA
     async function getAdminData(){
         try{
-                // Get groups to teachers
-                const res_groups = await db.collection("Grupos - Maestros").get()
-                set_groups_to_teachers(res_groups.docs.map(doc => doc.data()))
+            // Get groups to teachers
+            const res_groups = await db.collection("Grupos - Maestros").get()
+            set_groups_to_teachers(res_groups.docs.map(doc => doc.data()))
         }
         catch(error){
             console.log("GET ADMIN DATA ERROR:", error)

@@ -67,7 +67,7 @@ const MyActivities = () => {
                                     <p className="home_subject_title">Actividad 1</p>
                                 </TableCell>
                                 <TableCell align="left">
-                                    {activities?.act1 ? activities?.act1 : "No hay actividad registrada."}
+                                    {activities?.act1 ? activities?.act1 : "No hay actividad registrada"}
                                 </TableCell>
                             </TableRow>
 
@@ -77,7 +77,7 @@ const MyActivities = () => {
                                     <p className="home_subject_title">Actividad 2</p>
                                 </TableCell>
                                 <TableCell align="left">
-                                    {activities?.act2 ? activities?.act2 : "No hay actividad registrada."}
+                                    {activities?.act2 ? activities?.act2 : "No hay actividad registrada"}
                                 </TableCell>
                             </TableRow>
 
@@ -87,7 +87,7 @@ const MyActivities = () => {
                                     <p className="home_subject_title">Actividad 3</p>
                                 </TableCell>
                                 <TableCell align="left">
-                                    {activities?.act3 ? activities?.act3 : "No hay actividad registrada."}
+                                    {activities?.act3 ? activities?.act3 : "No hay actividad registrada"}
                                 </TableCell>
                             </TableRow>
                         </TableBody>

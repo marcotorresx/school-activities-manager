@@ -43,7 +43,7 @@ const AdminProvider = ({children}) => {
                     // Find teacher
                     if (user.nombre === lastTeacher){
                         // Filter subjects
-                        const filtered_subjects = user?.materias.filter(lt_subject => 
+                        const filtered_subjects = user?.materias?.filter(lt_subject => 
                             !(lt_subject?.grupo === group && lt_subject?.materia === subject))
                         // Set subjects in DB
                         await db.collection("Usuarios").doc(lastTeacher).update({materias: filtered_subjects})
@@ -71,9 +71,7 @@ const AdminProvider = ({children}) => {
             var selected_group = {}
             groups_to_teachers.forEach(group_to_teacher => {
                 // Find group
-                if (group_to_teacher.grupo === group) {
-                    selected_group = group_to_teacher
-                }
+                if (group_to_teacher.grupo === group) selected_group = group_to_teacher
             })
             // Change teacher
             selected_group[subject] = selectedTeacher
@@ -94,7 +92,7 @@ const AdminProvider = ({children}) => {
         try{
             // Change subjects teacher in Context and DB
             if(user.materias){
-                user.materias.forEach(grupo_materia => {
+                user?.materias?.forEach(grupo_materia => {
                     groups_to_teachers.forEach(async group_teacher => {
                         if (group_teacher.grupo === grupo_materia.grupo){
                             group_teacher[grupo_materia.materia] = null
@@ -106,7 +104,7 @@ const AdminProvider = ({children}) => {
             
             // Delete user from DB
             await db.collection("Usuarios").doc(user.nombre).delete()
-            set_all_users(all_users.filter(user_item => user_item.nombre !== user.nombre))
+            set_all_users(all_users.filter(user_item => user_item?.nombre !== user?.nombre))
 
             history.push("/admin/users")
         }

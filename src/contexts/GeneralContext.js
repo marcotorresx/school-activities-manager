@@ -210,17 +210,17 @@ const GeneralProvider = ({children}) => {
 
             // If mode teacher then create data with the params of the filter
             if (mode === "teacher"){
-                    const filter_data_activities = {
-                        act1: res.data().act1,
-                        act2: res.data().act2,
-                        act3: res.data().act3,
-                        maestro: res.data().maestro,
-                        grupo: group,
-                        materia: subject,
-                        periodo: period,
-                        semana: week
-                    }
-                    return filter_data_activities
+                const filter_data_activities = {
+                    act1: res.data().act1,
+                    act2: res.data().act2,
+                    act3: res.data().act3,
+                    maestro: res.data().maestro,
+                    grupo: group,
+                    materia: subject,
+                    periodo: period,
+                    semana: week
+                }
+                return filter_data_activities
             }
 
             // If mode student return params from DB

@@ -31,18 +31,23 @@ const EditActivities = () => {
 
     // UPDATE ACTIVITIES
     async function updateActivities(){
+        const act1 = !act1Value.trim() || act1Value === "" ? null : act1Value
+        const act2 = !act2Value.trim() || act2Value === "" ? null : act2Value
+        const act3 = !act3Value.trim() || act3Value === "" ? null : act3Value
+
         try{
             // Create new activities
             const new_activities = {
-                act1: act1Value,
-                act2: act2Value,
-                act3: act3Value,
+                act1,
+                act2,
+                act3,
                 maestro: activeUser.nombre,
                 grupo: group,
                 materia: subject,
                 periodo: period,
                 semana: week
             }
+            console.log(new_activities) // BORRAR
 
             // Set new activities on DB
             await db.collection(group).doc(subject).collection(period).doc(week).set(new_activities)

@@ -88,8 +88,8 @@ const MyAccount = () => {
                             <Typography variant="subtitle1" component="h2" gutterBottom>
                                 <b>Materias: </b>
                                 <ul className="materias_list">
-                                    {activeUser.materias.map((item, index) => (
-                                        <li className="materias_item" key={index}>{`${item.grupo} - ${item.materia}`}</li>
+                                    {activeUser?.materias.map((item, index) => (
+                                        <li className="materias_item" key={index}>{`${item?.grupo} - ${item?.materia}`}</li>
                                     ))}
                                 </ul>
                             </Typography>

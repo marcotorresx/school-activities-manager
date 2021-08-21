@@ -53,7 +53,7 @@ const Emails = () => {
                         </TableRow>
 
                         {/* TEACHERS */}
-                        { all_users.map(user => user.tipo === "Maestro" && (
+                        { all_users?.map(user => user.tipo === "Maestro" && (
                             <TableRow>
                                 <TableCell align="left">{user?.nombre ? user?.nombre : "No disponible"}</TableCell>
                                 <TableCell align="left">{user?.correo ? user?.correo : "No disponible"}</TableCell>
