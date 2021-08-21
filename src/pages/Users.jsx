@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import {Typography, TableContainer, Table, TableBody, TableRow, TableCell, Paper, Button} from '@material-ui/core'
 import {Link} from "react-router-dom"
 import "./Users.css"
-import { UserContext } from '../contexts/UserContext'
+import { GeneralContext } from '../contexts/GeneralContext'
 
 // STYLES
 const useStyles = makeStyles({
@@ -29,7 +29,7 @@ const useStyles = makeStyles({
 const Users = () => {
 
     // VARIABLES
-    const {all_users} = React.useContext(UserContext)
+    const {all_users} = React.useContext(GeneralContext)
     const classes = useStyles()
     const [teachers, setTeachers] = React.useState([])
     const [directives, setDirectives] = React.useState([])
@@ -47,13 +47,14 @@ const Users = () => {
             if (user.tipo === "Maestro") teachers.push(user)
             else if (user.tipo === "Directivo") directives.push(user)
             else if (user.tipo === "Admin") admins.push(user)
-            else admins.push(user)
+            else teachers.push(user)
         })
 
         setTeachers(teachers)
         setDirectives(directives)
         setAdmins(admins)
         setUsersLoaded(true)
+
     }
 
     // USE EFFECT

@@ -6,7 +6,7 @@ const AdminRoute = ({children}) => {
 
     const {activeUser} = React.useContext(UserContext)
 
-    if (activeUser && activeUser.tipo === "Admin") return <>{children}</>
+    if (activeUser && activeUser?.tipo === "Admin") return <>{children}</>
     else return <Redirect to="/"/>
 }
 

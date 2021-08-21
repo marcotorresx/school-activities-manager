@@ -17,3 +17,21 @@
   cursor: pointer;
   margin-top: 4px;
 }
+
+
+/* MEDIA QUERY */
+@media (max-width: 600px) {
+  .navbar_buttons {
+    display: none;
+  }
+  .show_phone_menu{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 55px;
+    left: 0;
+    background-color: rgba(0,0,0,0.8);
+    padding: 20px 0px;
+  }
+}

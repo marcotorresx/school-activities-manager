@@ -9,7 +9,6 @@ const UserProvider = ({children}) => {
     // VARIABLES
     const [activeUser, setActiveUser] = React.useState(null)
     const [groups_to_teachers, set_groups_to_teachers] = React.useState([])
-    const [all_users, set_all_users] = React.useState([])
     const [checkedUser, setCheckedUser] = React.useState(false) 
     const history = useHistory()
 
@@ -25,17 +24,25 @@ const UserProvider = ({children}) => {
             // Check if passwords are equal
             const userDB = res.docs[0].data()
             
-            // If passwords are equal set user and go to my activities
-            if (userDB.contra === password){
-                const {contra, ...others} = userDB
-                setActiveUser(others)
-                localStorage.setItem("user", JSON.stringify(others))
-                if (userDB?.tipo === "Admin") getAdminData()
-                history.push("/")
-            }
+            // If there are not equal return error
+            if (userDB.contra !== password) return ("La contraseña que ingresaste no es correcta.")
 
-            // If there are not equarl return error
-            else return ("La contraseña que ingresaste no es correcta.")
+            // Special user functions
+            if (userDB?.tipo === "Admin") getAdminData()
+            if (userDB?.tipo === "Maestro") userDB.materias = userDB?.materias.sort((a,b) => {
+                if (a?.grupo < b?.grupo) return -1
+                else if (a?.grupo > b?.grupo) return 1
+                else return 0
+            })
+
+            // If passwords are equal set user and go to my activities
+            const {contra, ...others} = userDB
+            setActiveUser(others)
+            localStorage.setItem("user_est_57", JSON.stringify(others))
+
+
+            history.push("/")
+
         }
         catch(error){
             console.log("LOGIN ERROR:", error)
@@ -45,21 +52,16 @@ const UserProvider = ({children}) => {
 
     // SIGN OUT
     function signOut(){
-        localStorage.removeItem("user");
+        localStorage.removeItem("user_est_57");
         setActiveUser(null)
     }
 
     // GET DATA
     async function getAdminData(){
-        console.log("GET ADMIN")
         try{
                 // Get groups to teachers
                 const res_groups = await db.collection("Grupos - Maestros").get()
                 set_groups_to_teachers(res_groups.docs.map(doc => doc.data()))
-
-                // Get all users
-                const res_users = await db.collection("Usuarios").get()
-                set_all_users(res_users.docs.map(doc => doc.data()))
         }
         catch(error){
             console.log("GET ADMIN DATA ERROR:", error)
@@ -68,7 +70,7 @@ const UserProvider = ({children}) => {
 
     // CHECK USER
     function checkUser(){
-        const user = JSON.parse(localStorage.getItem("user"))
+        const user = JSON.parse(localStorage.getItem("user_est_57"))
         if (user) setActiveUser(user)
         if (user?.tipo === "Admin") getAdminData()
         setCheckedUser(true)
@@ -82,7 +84,7 @@ const UserProvider = ({children}) => {
 
     return (
         checkedUser &&
-        <UserContext.Provider value={{ activeUser, login, signOut, groups_to_teachers, all_users, set_all_users }}>
+        <UserContext.Provider value={{ activeUser, login, signOut, groups_to_teachers }}>
             {children}
         </UserContext.Provider>
     )

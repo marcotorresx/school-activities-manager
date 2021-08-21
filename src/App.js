@@ -3,6 +3,7 @@ import './App.css'
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from "@material-ui/core"
 import Navbar from "./components/Navbar"
+import Footer from "./components/Footer"
 import {Switch, Route} from "react-router-dom"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
@@ -18,6 +19,8 @@ import AdminProvider from './contexts/AdminContext';
 import SeeUser from './pages/SeeUser';
 import MyActivities from './pages/MyActivities';
 import EditActivities from './pages/EditActivities';
+import GroupActivities from './pages/GroupActivities';
+import Emails from './pages/Emails';
 
 // STYLES
 const useStyles = makeStyles({
@@ -26,28 +29,27 @@ const useStyles = makeStyles({
     flexDirection: "column",
     justifyContent: "Top",
     alignItems: "center",
-    padding: "20px 40px"
+    padding: "20px 40px",
+    minHeight: "100vh"
   }
 });
 
 // COMPONENT
 function App() {
-
-  const classes = useStyles()
-
   return (
     <div className="App">
       {/* NAVBAR */}
       <Navbar/>
 
       {/* CONTAINER */}
-      <Container className={classes.container}>
+      <div className="container">
         <Switch>
 
           {/* -------------- NO AUTH -------------- */}
           <Route path="/" exact component={Home}/>
           <Route path="/login" component={Login}/>
           <Route path="/adds" component={Adds}/>
+          <Route path="/emails" component={Emails}/>
           <Route path="/myaccount" component={MyAccount}/>
 
           {/* -------------- TEACHERS ROUTE -------------- */}
@@ -60,7 +62,7 @@ function App() {
               </Route>
 
               {/* EDIT ACTIVITIES */}
-              <Route path="/teacher/editactivities/:group/:sub/:per/:wk">
+              <Route path="/teacher/editactivities/:group/:subject/:period/:week">
                 <EditActivities/>
               </Route>
 
@@ -78,7 +80,7 @@ function App() {
                 </Route>
 
                 {/* EDIT SUBJECT TEACHER */}
-                <Route path="/admin/editsubjectteacher/:group/:sub/:teach">
+                <Route path="/admin/editsubjectteacher/:group/:subject/:teacher">
                   <EditSubjectTeacher/>
                 </Route>
 
@@ -97,12 +99,20 @@ function App() {
                   <SeeUser/>
                 </Route>
 
+                {/* GRUUP ACTIVITIES */}
+                <Route path="/admin/groupactivities">
+                  <GroupActivities/>
+                </Route>
+
               </AdminProvider>
             </AdminRoute> 
           </Route>
 
         </Switch>
-      </Container>
+      </div>
+
+      {/* FOOTER */}
+      <Footer/>
     </div>
   );
 }

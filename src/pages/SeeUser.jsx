@@ -43,13 +43,19 @@ const SeeUser = () => {
 
     // GET USER
     async function getUser(){
-        const cleaned_username = username.replace("%20", " ")
-        const res = await db.collection("Usuarios").doc(cleaned_username).get()
-        if (res.exists){
+        try{
+            const res = await db.collection("Usuarios").doc(username).get()
+            if (!res.exists) {
+                alert("Hubo un error en la carga del usuario en la base de datos.")
+                return
+            }
             setUser(res.data())
             setUserLoaded(true)
         }
-        else alert("Hubo un error en la carga del usuario en la base de datos.")
+        catch(error){
+            alert("Hubo un error en la carga del usuario en la base de datos.")
+            console.log("SEE USER ERROR:", error)
+        }
     }
 
     // CLICK HANDLER
@@ -99,7 +105,7 @@ const SeeUser = () => {
                             </Typography>
                         </div>}
                         
-                        { (user?.materias && user?.materias.length > 0) &&
+                        { user?.materias &&
                         <div className="details_field">
                             <BookIcon />
                             <Typography variant="subtitle1" component="h2" gutterBottom>
@@ -110,8 +116,7 @@ const SeeUser = () => {
                                     ))}
                                 </ul>
                             </Typography>
-                        </div>
-                        }
+                        </div>}
                     </div>
                     
                     {/* DELETE BUTTON */}

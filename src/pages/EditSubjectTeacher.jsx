@@ -8,6 +8,7 @@ import BookIcon from '@material-ui/icons/Book';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import { AdminContext } from '../contexts/AdminContext';
 import { UserContext } from '../contexts/UserContext';
+import { GeneralContext } from '../contexts/GeneralContext';
 import {useHistory} from "react-router"
 
 // STYLES
@@ -40,13 +41,12 @@ const EditSubjectTeacher = () => {
 
     // VARIABLES
     const classes = useStyles()
-    const {activeUser, all_users} = React.useContext(UserContext)
+    const {activeUser} = React.useContext(UserContext)
+    const {all_users} = React.useContext(GeneralContext)
     const {changeTeacherOfSubject} = React.useContext(AdminContext)
-    const {group, sub, teach} = useParams()
-    const [subject, setSubject] = React.useState("")
-    const [teacher, setTeacher] = React.useState("")
-    const [selectedTeacher, setSelectedTeacher] = React.useState("null")
-    const [cleaned, setCleaned] = React.useState(false)
+    const {group, subject, teacher} = useParams()
+    const [selectedTeacher, setSelectedTeacher] = React.useState(teacher)
+    const [userChecked, setUserChecked] = React.useState(false)
     const [btnDisabled, setBtnDisabled] = React.useState(false)
     const history = useHistory()
 
@@ -62,31 +62,25 @@ const EditSubjectTeacher = () => {
             alert("Usted no es administrador de este turno, no puede hacer cambios en este turno.")
             history.push("/admin/groups")
         }
-    }
-
-    // CLEAN PARAMS
-    function cleanParams(){
-        setSubject(sub.replace("%20", " "))
-        setTeacher((!teach || teach === "null") ? null : teach.replace("%20", " "))
-        setSelectedTeacher(teach.replace("%20", " "))
-        setCleaned(true)
+        else setUserChecked(true)
     }
 
     // HANDLE CLICK
     function handleClick(){
         setBtnDisabled(true)
-        if (selectedTeacher === "null") changeTeacherOfSubject(group, subject, teacher, null)
+        if (teacher === "null" && selectedTeacher === "null" ) changeTeacherOfSubject(group, subject, null, null)
+        else if (selectedTeacher === "null") changeTeacherOfSubject(group, subject, teacher, null)
+        else if (teacher === "null") changeTeacherOfSubject(group, subject, null, selectedTeacher)
         else changeTeacherOfSubject(group, subject, teacher, selectedTeacher)
     }
 
     // USE EFFECT
     React.useEffect(() => {
         checkAdminTurn()
-        cleanParams()
     }, [])
 
     return (
-        cleaned && 
+        userChecked && 
         <div className="edit_subject_teacher">
             <Card className={classes.card}>
                 <CardContent className={classes.cardcontent}>

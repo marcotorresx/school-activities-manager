@@ -6,7 +6,7 @@ const TeacherRoute = ({children}) => {
 
     const {activeUser} = React.useContext(UserContext)
 
-    if (activeUser && activeUser.tipo === "Maestro") return <>{children}</>
+    if (activeUser && activeUser?.tipo === "Maestro") return <>{children}</>
     else return <Redirect to="/"/>
 
 }

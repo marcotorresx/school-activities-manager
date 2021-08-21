@@ -2,12 +2,14 @@ import React from 'react'
 import {db} from "../firebase"
 import {useHistory} from "react-router"
 import { UserContext } from './UserContext'
+import { GeneralContext } from './GeneralContext'
 
 export const AdminContext = React.createContext()
 
 const AdminProvider = ({children}) => {
 
-    const {all_users, set_all_users, groups_to_teachers} = React.useContext(UserContext)
+    const {groups_to_teachers} = React.useContext(UserContext)
+    const {all_users, set_all_users, groups_to_subjects} = React.useContext(GeneralContext)
     const history = useHistory()
 
     // CREATE USER
@@ -41,10 +43,10 @@ const AdminProvider = ({children}) => {
                     // Find teacher
                     if (user.nombre === lastTeacher){
                         // Filter subjects
-                        const filtered_subjects = user.materias.filter(lt_subject => 
-                            !(lt_subject.grupo === group && lt_subject.materia === subject))
+                        const filtered_subjects = user?.materias.filter(lt_subject => 
+                            !(lt_subject?.grupo === group && lt_subject?.materia === subject))
                         // Set subjects in DB
-                            await db.collection("Usuarios").doc(lastTeacher).update({materias: filtered_subjects})
+                        await db.collection("Usuarios").doc(lastTeacher).update({materias: filtered_subjects})
                         // Set subjects in context
                         user.materias = filtered_subjects
                     }
@@ -54,10 +56,10 @@ const AdminProvider = ({children}) => {
             if (selectedTeacher){
                 all_users.forEach(async user => {
                     // Find teacher
-                    if (user.nombre === selectedTeacher){
+                    if (user?.nombre === selectedTeacher){
                         // Create new subjects
                         const new_subject = {grupo: group, materia: subject}
-                        const new_teacher_subjects = [...user.materias, new_subject]
+                        const new_teacher_subjects = [...user?.materias, new_subject]
                         // Set subject in DB
                         await db.collection("Usuarios").doc(selectedTeacher).update({materias: new_teacher_subjects})
                         // Set subjects in context
@@ -91,14 +93,16 @@ const AdminProvider = ({children}) => {
     async function deleteUser(user){
         try{
             // Change subjects teacher in Context and DB
-            user.materias.forEach(grupo_materia => {
-                groups_to_teachers.forEach(async group_teacher => {
-                    if (group_teacher.grupo === grupo_materia.grupo){
-                        group_teacher[grupo_materia.materia] = null
-                        await db.collection("Grupos - Maestros").doc(grupo_materia.grupo).set(group_teacher)
-                    }
+            if(user.materias){
+                user.materias.forEach(grupo_materia => {
+                    groups_to_teachers.forEach(async group_teacher => {
+                        if (group_teacher.grupo === grupo_materia.grupo){
+                            group_teacher[grupo_materia.materia] = null
+                            await db.collection("Grupos - Maestros").doc(grupo_materia.grupo).set(group_teacher)
+                        }
+                    })
                 })
-            })
+            }
             
             // Delete user from DB
             await db.collection("Usuarios").doc(user.nombre).delete()
@@ -111,8 +115,37 @@ const AdminProvider = ({children}) => {
         }
     }
 
+    // FIND GROUP ACTIVITIES
+    function findGroupActivities(group, period, week){
+        const data = []
+        try{
+            groups_to_subjects[group].forEach(async subject => {
+                const res = await db.collection(group).doc(subject).collection(period).doc(week).get()
+                if (!res.exists) {
+                    const empty_object = {
+                        act1: null,
+                        act2: null,
+                        act3: null,
+                        maestro: "No registrado",
+                        materia: subject,
+                        grupo: group,
+                        periodo: period,
+                        semana: week
+                    }
+                    data.push(empty_object)
+                }
+                else data.push(res.data())
+            })
+            return data
+        }
+        catch(error){
+            console.log("FIND GROUP ACTIVITIES ERROR:", error)
+            return []
+        }
+    }
+
     return (
-        <AdminContext.Provider value={{ createUser, changeTeacherOfSubject, deleteUser }}>
+        <AdminContext.Provider value={{ createUser, changeTeacherOfSubject, deleteUser, findGroupActivities }}>
             {children}
         </AdminContext.Provider>
     )

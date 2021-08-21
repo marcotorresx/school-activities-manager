@@ -28,6 +28,9 @@
   font-weight: 400;
   margin-left: 5px;
 }
+.activities_container{
+  min-width: 50%;
+}
 .activity {
   border: 1px solid #ccc;
   padding: 30px;

@@ -76,9 +76,9 @@ const FilterTeacher = ({setActivities, setLoaded}) => {
                         onChange={e => setSelectedPeriod(e.target.value)}
                     >
                         <option aria-label="None" value=""/>
-                        <option value={"1er Periodo"}>1er Periodo</option>
-                        <option value={"2do Periodo"}>2do Periodo</option>
-                        <option value={"3er Periodo"}>3er Periodo</option>
+                        <option value="1er Periodo">1er Periodo</option>
+                        <option value="2do Periodo">2do Periodo</option>
+                        <option value="3er Periodo">3er Periodo</option>
                     </Select>
                 </FormControl>
 

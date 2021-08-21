@@ -23,23 +23,11 @@ const EditActivities = () => {
     // VARIABLES
     const classes = useStyles()
     const {activeUser} = React.useContext(UserContext)
-    const {group, sub, per, wk} = useParams()
-    const [subject, setSubject] = React.useState("")
-    const [period, setPeriod] = React.useState("")
-    const [week, setWeek] = React.useState("")
-    const [cleaned, setCleaned] = React.useState(false)
+    const {group, subject, period, week} = useParams()
     const [act1Value, setAct1Value] = React.useState("")
     const [act2Value, setAct2Value] = React.useState("")
     const [act3Value, setAct3Value] = React.useState("")
     const history = useHistory()
-
-    // CLEAN PARAMS
-    function cleanParams(){
-        setSubject(sub.replace("%20", " "))
-        setPeriod(per.replace("%20", " "))
-        setWeek(wk.replace("%20", " "))
-        setCleaned(true)
-    }
 
     // UPDATE ACTIVITIES
     async function updateActivities(){
@@ -68,13 +56,7 @@ const EditActivities = () => {
         }
     }
 
-    // USE EFFECT
-    React.useEffect(() => {
-        cleanParams()
-    }, [])
-
     return (
-        cleaned &&
         <div className="editactivities">
             <Typography variant="h6" component="h2" className={classes.title} align="center">CAMBIAR ACTIVIDADES DE GRUPO</Typography>
 

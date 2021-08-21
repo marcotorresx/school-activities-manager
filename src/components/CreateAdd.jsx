@@ -2,13 +2,12 @@ import React from 'react'
 import {Button} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import {db} from "../firebase"
-import Adds from '../pages/Adds';
 import { GeneralContext } from '../contexts/GeneralContext';
 
 // STYLES
 const useStyles = makeStyles({
     button: {
-        marginLeft: "30px",
+        marginLeft: "40px",
     }
 });
 
@@ -22,6 +21,11 @@ const CreateAdd = ({setNewAddSection}) => {
 
     // CREATE NEW ADD
     async function createNewAdd(){
+        // Validations
+        if (newAddValue === "" || !newAddValue.trim()){
+            alert("Los avisos deben contener un mensaje.")
+            return
+        }
         try{
             // Create object
             const new_add_object = {

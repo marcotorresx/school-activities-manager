@@ -82,7 +82,7 @@ const MyAccount = () => {
                                 <b>Turno: </b> {activeUser?.turno ? activeUser?.turno : "No disponible"}
                             </Typography>
                         </div>}
-                        { (activeUser?.materias && activeUser?.materias.length > 0) &&
+                        { activeUser?.materias &&
                         <div className="details_field">
                             <BookIcon />
                             <Typography variant="subtitle1" component="h2" gutterBottom>

@@ -4,3 +4,19 @@
   text-decoration: none;
   box-sizing: border-box;
 }
+.App{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.container{
+  display: flex;
+  flex-direction: column;
+  justify-content: Top;
+  align-items: center;
+  padding: 20px 40px;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 1400px;
+}

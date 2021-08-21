@@ -5,12 +5,20 @@ import {Button, Typography, FormControl, Select, InputLabel} from '@material-ui/
 import {GeneralContext} from '../contexts/GeneralContext';
 
 // STYLES
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     formControl: {
         width: "160px",
-        margin: "0px 20px 0px 0px"
+        margin: "0px 20px 0px 0px",
+        [theme.breakpoints.down("xs")]: {
+            margin: "10px 0px"
+        }
     },
-});
+    btn: {
+        [theme.breakpoints.down("xs")]: {
+            margin: "30px 0px 0px 0px"
+        }
+    }
+}))
 
 // COMPONENT
 const Filter = ({setActivities, setLoaded}) => {
@@ -31,7 +39,6 @@ const Filter = ({setActivities, setLoaded}) => {
         }
 
         // Find activities
-        console.log("FILTER STUDENT ACTIVITIES PARAMS:", selectedGroup, selectedSubject, selectedPeriod, selectedWeek)
         const activities = await findActivities("student", selectedGroup, selectedSubject, selectedPeriod, selectedWeek)
         console.log("FILTER STUDENT ACTIVITIES RECIVED:", activities)
         setActivities(activities)
@@ -68,7 +75,7 @@ const Filter = ({setActivities, setLoaded}) => {
                         onChange={e => setSelectedSubject(e.target.value)}
                     >
                         <option aria-label="None" value=""/>
-                        {selectedGroup !== "" && groups_to_subjects[selectedGroup].map(week => (<option value={week} key={week}>{week}</option>))}
+                        {selectedGroup !== "" && groups_to_subjects[selectedGroup].map(subject => (<option value={subject} key={subject}>{subject}</option>))}
                     </Select>
                 </FormControl>
 
@@ -81,9 +88,9 @@ const Filter = ({setActivities, setLoaded}) => {
                         onChange={e => setSelectedPeriod(e.target.value)}
                     >
                         <option aria-label="None" value=""/>
-                        <option value={"1er Periodo"}>1er Periodo</option>
-                        <option value={"2do Periodo"}>2do Periodo</option>
-                        <option value={"3er Periodo"}>3er Periodo</option>
+                        <option value="1er Periodo">1er Periodo</option>
+                        <option value="2do Periodo">2do Periodo</option>
+                        <option value="3er Periodo">3er Periodo</option>
                     </Select>
                 </FormControl>
 
@@ -101,7 +108,7 @@ const Filter = ({setActivities, setLoaded}) => {
                 </FormControl>
 
                 {/* BUTTON */}
-                <Button variant="contained" color="primary" onClick={handleClick}>Buscar</Button>
+                <Button variant="contained" color="primary" onClick={handleClick} className={classes.btn}>Buscar</Button>
 
             </div>
         </div>

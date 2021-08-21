@@ -9,3 +9,12 @@
   display: flex;
   align-items: center;
 }
+
+
+/* MEDIA QUERY */
+@media (max-width: 600px) {
+  .basic_filter {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}

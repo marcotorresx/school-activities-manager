@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    [theme.breakpoints.down("xs")]: {
+        width: "280px",
+    }
   },
   avatar: {
     margin: theme.spacing(1),

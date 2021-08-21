@@ -1,8 +1,6 @@
 import React from 'react'
 import "./Home.css"
 import Filter from '../components/Filter'
-import { makeStyles } from '@material-ui/core/styles';
-import {Typography} from '@material-ui/core'
 
 const Home = () => {
 
@@ -33,7 +31,7 @@ const Home = () => {
                     {/* ACTIVITY 1 */}
                     <div className="activity">
                         <h2 className="activity_title">Actividad 1</h2>
-                        <p className="activity_content">{activities?.act1 ? activities?.act1.replaceAll("*_/", "\n") : "No hay actividad registrada"}</p>
+                        <p className="activity_content">{activities?.act1 ? activities?.act1 : "No hay actividad registrada"}</p>
                     </div>
 
                     {/* ACTIVITY 2 */}
@@ -48,8 +46,7 @@ const Home = () => {
                         <p className="activity_content">{activities?.act3 ? activities?.act3 : "No hay actividad registrada"}</p>
                     </div>
                 </div>
-            </>
-            }
+            </>}
         </div>
     )
 }

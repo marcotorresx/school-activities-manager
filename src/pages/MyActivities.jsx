@@ -1,7 +1,7 @@
 import React from 'react'
 import FilterTeacher from '../components/FilterTeacher'
 import { makeStyles } from '@material-ui/core/styles';
-import {TableContainer, Table, TableBody, TableRow, TableCell, Paper, Typography, Button} from '@material-ui/core'
+import {TableContainer, Table, TableBody, TableRow, TableCell, Paper, Button} from '@material-ui/core'
 import {Link} from "react-router-dom"
 import "./MyActivities.css"
 
@@ -11,7 +11,8 @@ const useStyles = makeStyles({
         margin: "30px 0px 30px 0px"
     },
     table: {
-        width: "100%"
+        width: "100%",
+        whiteSpace: "pre-wrap"
     },
     title: {
         marginTop: "45px",
