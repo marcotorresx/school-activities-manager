@@ -40,7 +40,6 @@ const Filter = ({setActivities, setLoaded}) => {
 
         // Find activities
         const activities = await findActivities("student", selectedGroup, selectedSubject, selectedPeriod, selectedWeek)
-        console.log("FILTER STUDENT ACTIVITIES RECIVED:", activities)
         setActivities(activities)
         setLoaded(true)
     }

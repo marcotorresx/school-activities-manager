@@ -75,9 +75,7 @@ const EditSubjectTeacher = () => {
     }
 
     // USE EFFECT
-    React.useEffect(() => {
-        checkAdminTurn()
-    }, [])
+    React.useEffect(checkAdminTurn, [activeUser, group, history])
 
     return (
         userChecked && 
@@ -110,8 +108,9 @@ const EditSubjectTeacher = () => {
                                 value={selectedTeacher} onChange={e => setSelectedTeacher(e.target.value)}
                             >
                                 <option value="null"></option>
-                                {all_users.map(user => user?.tipo === "Maestro" && (
-                                    <option value={user?.nombre} key={user?.nombre}>{user?.nombre}</option>
+                                { // RENDER USER SELECTS      user[0] = nombre     user[1] = data
+                                all_users.map((user, index) => user[1]?.tipo === "Maestro" && (
+                                    <option value={user[0]} key={index}>{user[0] ? user[0] : "No disponible"}</option>
                                 ))}
                             </select>
                         </div>

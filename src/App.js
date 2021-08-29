@@ -1,7 +1,4 @@
 import React from 'react'
-import './App.css'
-import { makeStyles } from '@material-ui/core/styles';
-import { Container } from "@material-ui/core"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import {Switch, Route} from "react-router-dom"
@@ -21,10 +18,12 @@ import MyActivities from './pages/MyActivities';
 import EditActivities from './pages/EditActivities';
 import GroupActivities from './pages/GroupActivities';
 import Emails from './pages/Emails';
+import './App.css'
 
 function App() {
   return (
     <div className="App">
+      
       {/* NAVBAR */}
       <Navbar/>
 

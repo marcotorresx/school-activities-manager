@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     table: {
         width: "100%",
         whiteSpace: "pre-wrap"
-    },
+    }
 });
 
 // COMPONENT
@@ -38,25 +38,25 @@ const Emails = () => {
 
                         {/* HEADERS */}
                         <TableRow key="headers">
-                            <TableCell align="left"><b>MAESTRO</b></TableCell>
+                            <TableCell align="left" styles={{minWidth: "170px"}}><b>MAESTRO</b></TableCell>
                             <TableCell align="left"><b>CORREO</b></TableCell>
                         </TableRow>
 
                         {/* DIRECTIVES */}
                         <TableRow>
-                            <TableCell align="left">Dirección Turno Matutino</TableCell>
+                            <TableCell align="left">DIRECCIÓN TURNO MATUTINO</TableCell>
                             <TableCell align="left">contacto.est57matutino@gmail.com</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell align="left">Dirección Turno Matutino</TableCell>
+                            <TableCell align="left">DIRECCIÓN TURNO VESPERTINO</TableCell>
                             <TableCell align="left">contacto.est57vespertino@gmail.com</TableCell>
                         </TableRow>
 
-                        {/* TEACHERS */}
-                        { all_users?.map(user => user.tipo === "Maestro" && (
-                            <TableRow>
-                                <TableCell align="left">{user?.nombre ? user?.nombre : "No disponible"}</TableCell>
-                                <TableCell align="left">{user?.correo ? user?.correo : "No disponible"}</TableCell>
+                        { // TEACHERS    user[0] = nombre    user[1] = data
+                        all_users?.map((user, index) => user[1]?.tipo === "Maestro" && (
+                            <TableRow key={index}>
+                                <TableCell align="left">{user[0] ? user[0] : "No disponible"}</TableCell>
+                                <TableCell align="left">{user[1]?.correo ? user[1]?.correo : "No disponible"}</TableCell>
                             </TableRow>
                         ))}
 

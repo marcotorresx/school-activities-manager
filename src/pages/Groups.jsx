@@ -32,7 +32,7 @@ const Groups = () => {
 
     // VARIABLES
     const classes = useStyles()
-    const {all_groups, groups_to_subjects} = React.useContext(GeneralContext)
+    const {all_groups} = React.useContext(GeneralContext)
     const {groups_to_teachers} = React.useContext(UserContext)
     const [data, setData] = React.useState([])
     const [selectedGroup, setSelectedGroup] = React.useState("")
@@ -40,25 +40,25 @@ const Groups = () => {
     // MAKE TABLE DATA
     function makeData(){
         if (selectedGroup !== ""){
-            // Get group subjects
-            var group_teachers = []
-            groups_to_teachers.forEach(group => {
-                if(group.grupo === selectedGroup) group_teachers = group
+            // Find the group and teachers and create an array
+            groups_to_teachers.forEach( groupItem => {
+                if(groupItem.grupo === selectedGroup) {
+                    // Sort the group
+                    const group = Object.entries(groupItem)
+                    const sorted_group = group.sort((a, b) => {
+                        // a[0] = materia
+                        if (a[0] > b[0]) return 1
+                        if (a[0] < b[0]) return -1
+                        return 0
+                    })
+                    setData(sorted_group)
+                }
             })
-
-            // Create array with subject and teacher
-            var data = []
-            groups_to_subjects[selectedGroup].forEach(subject => {
-                data.push({materia: subject, maestro: group_teachers[subject]})
-            })
-            setData(data)
         }
     }
 
     // REACT USE EFFECT
-    React.useEffect(() => {
-        makeData()
-    }, [selectedGroup])
+    React.useEffect(makeData, [selectedGroup, groups_to_teachers])
 
     return (
         <div className="admin">
@@ -98,20 +98,20 @@ const Groups = () => {
                             <TableCell align="left"><b>EDITAR</b></TableCell>
                         </TableRow>
 
-                        {/* SUBJECTS */
-                        selectedGroup !== "" && data.map(item => (
+                        {// SUBJECTS      item[0] = materia      item[1] = maestro
+                        selectedGroup !== "" && data.map((item, index) => item[0] !== "grupo" && (
                             
-                        <TableRow key={item?.materia}>
+                        <TableRow key={index}>
                             <TableCell align="left" style={{ width: 300 }}>
-                                {item?.materia ? item?.materia : "No hay materia"}
+                                {item[0] ? item[0] : "No hay materia"}
                             </TableCell>
                             <TableCell align="left">
-                                {item?.maestro ? item?.maestro : "No hay maestro"}
+                                {item[1] ? item[1] : "No hay maestro"}
                             </TableCell>
                             <TableCell align="left" style={{ width: 200 }}>
                                 <Link 
                                 className={classes.link} 
-                                to={`/admin/editsubjectteacher/${selectedGroup}/${item?.materia}/${item?.maestro ? item?.maestro : "null"}`}>
+                                to={`/admin/editsubjectteacher/${selectedGroup}/${item[0]}/${item[1] ? item[1] : "null"}`}>
                                     Editar Maestro
                                 </Link>
                             </TableCell>

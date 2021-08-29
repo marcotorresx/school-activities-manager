@@ -5,9 +5,9 @@ import { UserContext } from '../contexts/UserContext'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import CreateAdd from '../components/CreateAdd'
 import { GeneralContext } from '../contexts/GeneralContext'
-import {db} from "../firebase"
+import {db, firebase} from "../firebase"
+import dateFormat from "dateformat"
 import "./Adds.css"
-const dateFormat = require("dateformat")
 
 // STYLES
 const useStyles = makeStyles({
@@ -45,9 +45,17 @@ const Adds = () => {
         try{
             const confirm = window.confirm("¿Estas seguro que quieres eliminar este aviso?")
             if (confirm){
-                await db.collection("Avisos").doc(id).delete()
-                const filter_adds = adds.filter(add => add?.id !== id)
-                setAdds(filter_adds)
+                
+                // Create new object
+                const newObject = {}
+                newObject[id] = firebase.firestore.FieldValue.delete()
+
+                // Delete in DB
+                await db.collection("Datos Iniciales").doc("Avisos").update(newObject)
+
+                // Delete in Context
+                const filtered_adds = adds.filter(add => add[0] !== id)
+                setAdds(filtered_adds)
             }
         }
         catch(error){
@@ -56,9 +64,7 @@ const Adds = () => {
     }
 
     // USE EFFECT
-    React.useEffect(() => {
-        checkUser()
-    }, [activeUser])
+    React.useEffect(checkUser, [activeUser])
 
     return (
         checkedUser &&
@@ -76,13 +82,17 @@ const Adds = () => {
             
             <div className="adds_container">
                 {
-                // If there are adds
+                // If there are adds      add[0] = id     add[1] = data
                 adds?.length > 0 ? adds.map(add => (
-                <div className="add_container" key={add?.id}>
-                    <p className="add_date">{add?.data().date ? dateFormat(new Date(add?.data().date.toDate()), "fullDate") : "No disponible"}</p>
-                    <p className="add_content">{add?.data().add ? add?.data().add : "No disponible"}</p>
-                    {isDirective && <HighlightOffIcon onClick={() => deleteAdd(add?.id)}/>}
+
+                <div className="add_container" key={add[0]}>
+                    <p className="add_date">{add[1]?.date ? dateFormat( new Date( add[1]?.date.toDate() ), "fullDate" ) : "No disponible"}</p>
+                    <p className="add_content">{add[1]?.add ? add[1]?.add : "No disponible"}</p>
+
+                    {/* Close button */}
+                    {isDirective && <HighlightOffIcon onClick={() => deleteAdd(add[0])}/>}
                 </div>
+
                 ))  
                 : // If there are not adds
                 <Typography variant="subtitle2" component="h2" align="center" className={calsses.noadds}>No hay avisos</Typography>

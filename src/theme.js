@@ -4,7 +4,7 @@ import blue from "@material-ui/core/colors/blue"
 const theme = createTheme({
     palette: {
         primary: blue
-    },
+    }
 });
   
-  export default theme;
+export default theme;

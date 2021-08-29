@@ -48,7 +48,6 @@ const MyAccount = () => {
 
     return (
         userChecked && 
-
         <div>
             <Card className={classes.card}>
                 <CardContent className={classes.cardcontent}>

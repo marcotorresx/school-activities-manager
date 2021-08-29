@@ -2,7 +2,8 @@ import React from 'react'
 import {Button} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import {db} from "../firebase"
-import { GeneralContext } from '../contexts/GeneralContext';
+import { GeneralContext } from '../contexts/GeneralContext'
+import shortid from "shortid"
 
 // STYLES
 const useStyles = makeStyles({
@@ -16,7 +17,7 @@ const CreateAdd = ({setNewAddSection}) => {
 
     // VARIABLES
     const calsses = useStyles()
-    const {getAdds} = React.useContext(GeneralContext)
+    const {getInitialData} = React.useContext(GeneralContext)
     const [newAddValue, setNewAddValue] = React.useState("")
 
     // CREATE NEW ADD
@@ -28,14 +29,16 @@ const CreateAdd = ({setNewAddSection}) => {
         }
         try{
             // Create object
-            const new_add_object = {
+            const newID = shortid.generate()
+            const newObject = {}
+            newObject[newID] = { 
                 add: newAddValue,
                 date: new Date()
             }
 
             // Set data on DB
-            await db.collection("Avisos").add(new_add_object)
-            getAdds()
+            await db.collection("Datos Iniciales").doc("Avisos").update(newObject)
+            getInitialData()
             
             // Close section
             setNewAddSection(false)

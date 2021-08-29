@@ -46,9 +46,10 @@ const GroupActivities = () => {
         // Find activities
         setLoaded(false)
         setDisableBtn(true)
+
         const activities = await findGroupActivities(selectedGroup, selectedPeriod, selectedWeek)
-        console.log("GROUP ACTIVITIES RECIVED:", activities)
         setActivities(activities)
+        
         setTimeout(() => {
             setLoaded(true)
             setDisableBtn(false)

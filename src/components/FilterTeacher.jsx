@@ -39,7 +39,6 @@ const FilterTeacher = ({setActivities, setLoaded}) => {
 
         // Find activities
         const activities = await findActivities("teacher", group, subject, selectedPeriod, selectedWeek)
-        console.log("FILTER TEACHER ACTIVITIES RECIVED:", activities)
         setActivities(activities)
         setLoaded(true)
     }

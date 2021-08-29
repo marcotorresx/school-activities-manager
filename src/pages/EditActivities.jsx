@@ -41,18 +41,17 @@ const EditActivities = () => {
                 act1,
                 act2,
                 act3,
-                maestro: activeUser.nombre,
+                maestro: activeUser?.nombre,
                 grupo: group,
                 materia: subject,
                 periodo: period,
                 semana: week
             }
-            console.log(new_activities) // BORRAR
 
             // Set new activities on DB
             await db.collection(group).doc(subject).collection(period).doc(week).set(new_activities)
 
-            // Push to My ACtivities
+            // Push to My Activities
             history.push("/teacher/myactivities")
         }
         catch(error){

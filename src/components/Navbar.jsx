@@ -69,17 +69,17 @@ const Navbar = () => {
 
                     {/* NO AUTH */}
                     <Link to="/" className="navbar_link">
-                        <Button color="inherit" className={classes.button}>ALUMNOS</Button>
+                        <Button color="inherit" className={classes.button} onClick={() => setShowPhoneMenu(false)}>ALUMNOS</Button>
                     </Link>
                     <Link to="/adds" className="navbar_link">
-                        <Button color="inherit" className={classes.button}>AVISOS</Button>
+                        <Button color="inherit" className={classes.button} onClick={() => setShowPhoneMenu(false)}>AVISOS</Button>
                     </Link>
                     <Link to="/emails" className="navbar_link">
-                        <Button color="inherit" className={classes.button}>CORREOS</Button>
+                        <Button color="inherit" className={classes.button} onClick={() => setShowPhoneMenu(false)}>CORREOS</Button>
                     </Link>
                     {!activeUser && 
                     <Link to="/login" className="navbar_link">
-                        <Button color="inherit" className={classes.button}>INGRESAR</Button>
+                        <Button color="inherit" className={classes.button} onClick={() => setShowPhoneMenu(false)}>INGRESAR</Button>
                     </Link>}
 
                     {/* ADMIN */

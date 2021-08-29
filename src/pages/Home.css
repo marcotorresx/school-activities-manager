@@ -28,7 +28,7 @@
   font-weight: 400;
   margin-left: 5px;
 }
-.activities_container{
+.activities_container {
   min-width: 50%;
 }
 .activity {
@@ -38,6 +38,7 @@
   border-radius: 10px;
   font-family: "Roboto", sans-serif;
   white-space: pre-wrap;
+  word-wrap: break-word;
 }
 .activity_title {
   font-size: 17px;

@@ -41,33 +41,34 @@ const SeeUser = () => {
     const [user, setUser] = React.useState({})
     const [userLoaded, setUserLoaded] = React.useState(false)
 
-    // GET USER
-    async function getUser(){
-        try{
-            const res = await db.collection("Usuarios").doc(username).get()
-            if (!res.exists) {
-                alert("Hubo un error en la carga del usuario en la base de datos.")
-                return
-            }
-            setUser(res.data())
-            setUserLoaded(true)
-        }
-        catch(error){
-            alert("Hubo un error en la carga del usuario en la base de datos.")
-            console.log("SEE USER ERROR:", error)
-        }
-    }
-
     // CLICK HANDLER
     function clickHandler(){
         const confirm = window.confirm("¿Estás seguro de querer eliminar este usuario?")
         if (confirm) deleteUser(user)
     }
-
+    
     // USE EFFECT
-    React.useEffect(() => {
+    React.useEffect(()=> {
+
+        // GET USER
+        async function getUser(){
+            try{
+                const res = await db.collection("Usuarios").doc(username).get()
+                if (!res.exists) {
+                    alert("Hubo un error en la carga del usuario en la base de datos.")
+                    return
+                }
+                setUser(res.data())
+                setUserLoaded(true)
+            }
+            catch(error){
+                alert("Hubo un error en la carga del usuario en la base de datos.")
+                console.log("SEE USER ERROR:", error)
+            }
+        }
         getUser()
-    }, [])
+
+    }, [username])
 
     return (
         userLoaded &&

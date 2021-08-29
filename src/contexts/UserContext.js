@@ -21,21 +21,20 @@ const UserProvider = ({children}) => {
             if (res.docs.length === 0) return ("El correo ingresado no está registrado.")
             if (res.docs.length > 1) return ("Hay varios cuentas registradas con ese correo, contacta a un administrador.")
 
-            // Check if passwords are equal
             const userDB = res.docs[0].data()
             
-            // If there are not equal return error
+            // Check if passwords are equal
             if (userDB.contra !== password) return ("La contraseña que ingresaste no es correcta.")
 
             // Special user functions
             if (userDB?.tipo === "Admin") getAdminData()
             if (userDB?.tipo === "Maestro") userDB.materias = userDB?.materias.sort((a,b) => {
                 if (a?.grupo < b?.grupo) return -1
-                else if (a?.grupo > b?.grupo) return 1
-                else return 0
+                if (a?.grupo > b?.grupo) return 1
+                return 0
             })
 
-            // If passwords are equal set user and go to my activities
+            // Set user and go to my activities
             const {contra, ...others} = userDB
             setActiveUser(others)
             localStorage.setItem("user_est_57", JSON.stringify(others))
@@ -54,7 +53,7 @@ const UserProvider = ({children}) => {
         setActiveUser(null)
     }
 
-    // GET DATA
+    // GET ADMIN DATA
     async function getAdminData(){
         try{
             // Get groups to teachers
@@ -62,6 +61,7 @@ const UserProvider = ({children}) => {
             set_groups_to_teachers(res_groups.docs.map(doc => doc.data()))
         }
         catch(error){
+            alert("Hubo un error con la carga de datos de administrador.")
             console.log("GET ADMIN DATA ERROR:", error)
         }
     }
@@ -75,14 +75,12 @@ const UserProvider = ({children}) => {
     }
 
     // USE EFFECT
-    React.useEffect(() => {
-        checkUser()
-    }, [])     
+    React.useEffect(checkUser, [])     
     
 
     return (
         checkedUser &&
-        <UserContext.Provider value={{ activeUser, login, signOut, groups_to_teachers }}>
+        <UserContext.Provider value={{ activeUser, login, signOut, groups_to_teachers}}>
             {children}
         </UserContext.Provider>
     )

@@ -1,6 +1,7 @@
 import React from 'react'
+import InitialDataError from '../components/InitialDataError'
 import {db} from "../firebase"
-const dateFormat = require("dateformat")
+import dateFormat from "dateformat"
 
 export const GeneralContext = React.createContext()
 
@@ -54,6 +55,8 @@ const GeneralProvider = ({children}) => {
 
     const [adds, setAdds] = React.useState([])
     const [all_users, set_all_users] = React.useState([])
+    const [loadedInitialData, setLoadedInitialData] = React.useState(false)
+    const [errorInitialData, setErrorInitialData] = React.useState(false)
 
     const all_groups = ["1A", "1B", "1C", "1D", "1E","1F", "1G", "1H",
                         "2A", "2B", "2C", "2D", "2E","2F", "2G", "2H",
@@ -62,79 +65,79 @@ const GeneralProvider = ({children}) => {
     const groups_to_subjects = {
 
         // PRIMEROS
-        "1A": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "1A": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
         
-        "1B": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "1B": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
         
-        "1C": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "1C": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
 
-        "1D": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "1D": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
         
-        "1E": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "1E": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
 
-        "1F": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería"],
+        "1F": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería"],
         
-        "1G": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería"],
+        "1G": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería"],
         
-        "1H": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería"],
+        "1H": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Biología", "Geografía", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería"],
 
         // SEGUDOS
-        "2A": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Física", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "2A": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Física", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
         
-        "2B": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Física", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "2B": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Física", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
         
-        "2C": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Física", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "2C": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Física", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
 
-        "2D": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Física", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "2D": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Física", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
         
-        "2E": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Física", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "2E": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Física", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
 
-        "2F": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Física", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería"],
+        "2F": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Física", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería"],
 
-        "2G": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Física", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería"],
+        "2G": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Física", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería"],
 
-        "2H": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Física", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería"],
+        "2H": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Física", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería"],
 
         // TERCEROS
-        "3A": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Química", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "3A": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Química", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
         
-        "3B": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Química", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "3B": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Química", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
         
-        "3C": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Química", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "3C": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Química", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
 
-        "3D": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Química", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "3D": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Química", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
         
-        "3E": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Química", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería", "Informática"],
+        "3E": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Química", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería", "Informática"],
 
-        "3F": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Química", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería"],
+        "3F": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Química", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería"],
 
-        "3G": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Química", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería"],
+        "3G": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Química", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería"],
 
-        "3H": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "F.C. y E.", "Vida Saludable", 
-                "Edu. Física", "Inglés", "Química", "Mecánica", "Ind. del Vestido", "Robótica", "Carpintería"]
+        "3H": ["Tutoría", "Artes", "Historia", "Matemáticas", "Español", "FC y E", "Vida Saludable", 
+                "Edu Física", "Inglés", "Química", "Mecánica", "Ind del Vestido", "Robótica", "Carpintería"]
     }
 
     const weeks = {
@@ -203,7 +206,6 @@ const GeneralProvider = ({children}) => {
         try{
             // Search for document in DB    
             const res = await db.collection(group).doc(subject).collection(period).doc(week).get()
-            console.log("RES EXISTS:", res.exists)
 
             // If document doesnt exists return false and null
             if (!res.exists) return null_activities
@@ -233,39 +235,66 @@ const GeneralProvider = ({children}) => {
             return null_activities
         }
     }
-    
-    // GET ADDS
-    async function getAdds(){
-        try{
-            const res = await db.collection("Avisos").orderBy("date", "desc").get()
-            setAdds(res.docs)
-        }
-        catch(error){
-            console.log("GET ADDS ERROR:", error)
-        }
-    }
 
-    // GET USERS
-    async function getUsers(){
+    // GET INITIAL DATA
+	async function getInitialData(){
         try{
-            const res_users = await db.collection("Usuarios").orderBy("nombre").get()
-            set_all_users(res_users.docs.map(doc => doc.data()))
+			// Get adds
+            const res_adds = await db.collection("Datos Iniciales").doc("Avisos").get()
+			const adds = Object.entries(res_adds.data())
+			const sorted_adds =  adds.sort((a, b) => {
+				// a[0] = id   a[1] = data
+				if (a[1].date > b[1].date) return -1
+				if (a[1].date < b[1].date) return 1
+				return 0
+			})
+			setAdds(sorted_adds)
+
+			// Get users
+			const res_users = await db.collection("Datos Iniciales").doc("Usuarios").get()
+			const users = Object.entries(res_users.data())
+			const sorted_users =  users.sort((a, b) => {
+				// a[0] = nombre   a[1] = data
+				if (a[0] > b[0]) return 1
+				if (a[0] < b[0]) return -1
+				return 0
+			})
+			set_all_users(sorted_users)
+
+            setErrorInitialData(false)
+            setLoadedInitialData(true)
         }
         catch(error){
-            console.log("GET USERS ERROR:", error)
+            console.log("GET INITIAL DATA ERROR:", error)
+            setErrorInitialData(true)
+            setLoadedInitialData(true)
         }
     }
 
     // USE EFFECT
     React.useEffect(() => {
-        getAdds()
-        getUsers()
-    }, [])
+		getInitialData()
+	}, [])
 
     return (
-        <GeneralContext.Provider value={{ all_groups, groups_to_subjects, weeks, findActivities, adds, setAdds, getAdds, all_users, set_all_users}}>
-            {children}
-        </GeneralContext.Provider>
+
+        // First load the data
+        loadedInitialData ? 
+
+            // If there are not errors
+            !errorInitialData ?
+
+            // Then load all the app
+            <GeneralContext.Provider 
+                value={{ all_groups, groups_to_subjects, weeks, findActivities, adds, setAdds, getInitialData, all_users, set_all_users }}>
+                {children}
+            </GeneralContext.Provider>
+
+            // Else render error
+            : <InitialDataError/>
+
+        // Render loading
+        : <p style={{fontFamily: "Roboto", padding: "15px"}}>Loading...</p>
     )
 }
 

@@ -20,7 +20,9 @@
   margin-bottom: 5px;
 }
 .add_content {
+  max-width: 100%;
   font-size: 15px;
+  word-wrap: break-word;
 }
 .add_container .MuiSvgIcon-root {
   position: absolute;
